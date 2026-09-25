@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display tracking-tight text-ink-900;
+    text-wrap: balance;
+  }
+
+  /* Consistent focus ring across interactive elements */
+  :where(a, button, input, select, textarea):focus-visible {
+    @apply outline-none ring-2 ring-leaf-500 ring-offset-2 ring-offset-sand-50;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Page gutter — one place to change horizontal rhythm */
+  .shell {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full text-sm font-semibold
+           transition-all duration-200 ease-out disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-md {
+    @apply px-5 py-2.5;
+  }
+  .btn-lg {
+    @apply px-7 py-3.5 text-base;
+  }
+  .btn-primary {
+    @apply bg-leaf-700 text-white shadow-soft hover:bg-leaf-800 hover:shadow-lift active:translate-y-px;
+  }
+  .btn-secondary {
+    @apply border border-leaf-700/20 bg-white/70 text-leaf-800 backdrop-blur
+           hover:border-leaf-700/40 hover:bg-white active:translate-y-px;
+  }
+  .btn-ghost {
+    @apply text-ink-600 hover:bg-ink-900/5 hover:text-ink-900;
+  }
+
+  .card {
+    @apply rounded-3xl border border-ink-900/5 bg-white shadow-soft;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-ink-900/10 bg-white
+           px-3 py-1.5 text-xs font-medium text-ink-600 transition-colors duration-200;
+  }
+  .chip-active {
+    @apply border-leaf-700 bg-leaf-700 text-white;
+  }
+
+  .field {
+    @apply w-full rounded-xl border border-ink-900/10 bg-white px-4 py-3 text-sm text-ink-800
+           placeholder:text-ink-400 transition-colors duration-200 focus:border-leaf-500;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-ink-500;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-leaf-700/15 bg-leaf-50
+           px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-leaf-700;
+  }
+}
+
+@layer utilities {
+  /* Horizontal product rail on the home page */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-br from-leaf-700 via-leaf-600 to-mint-500 bg-clip-text text-transparent;
+  }
+}
