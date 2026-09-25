@@ -1,11 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Check, ShieldCheck } from '../components/Icons';
 import { EASE, Reveal, StaggerGrid, StaggerItem } from '../components/Motion';
 import PageHero from '../components/PageHero';
 import Rating from '../components/Rating';
-import { reviewSummary, siteReviews } from '../data/content';
+import { reviewSummary as fallbackSummary, siteReviews as fallbackReviews } from '../data/content';
+import { fetchFeaturedReviews, fetchReviewSummary, useCatalog } from '../context/CatalogContext';
 
 const FILTERS = [
   { value: 'all', label: 'All reviews' },
@@ -15,10 +16,31 @@ const FILTERS = [
 
 export default function Reviews() {
   const [filter, setFilter] = useState('all');
+  const { getProduct } = useCatalog();
+
+  // Live reviews, with the bundled set showing until they arrive.
+  const [siteReviews, setSiteReviews] = useState(fallbackReviews);
+  const [reviewSummary, setReviewSummary] = useState(fallbackSummary);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const [r, s] = await Promise.all([
+        fetchFeaturedReviews(fallbackReviews),
+        fetchReviewSummary(fallbackSummary),
+      ]);
+      if (cancelled) return;
+      setSiteReviews(r.reviews);
+      setReviewSummary(s.summary);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const shown = useMemo(
     () => (filter === 'all' ? siteReviews : siteReviews.filter((r) => String(r.rating) === filter)),
-    [filter],
+    [filter, siteReviews],
   );
 
   return (
@@ -116,7 +138,7 @@ export default function Reviews() {
                   </div>
                   <p className="mt-3 flex items-center gap-1.5 text-[11px] font-semibold text-leaf-700">
                     <Check className="h-3.5 w-3.5" />
-                    Verified purchase · {review.product}
+                    Verified purchase · {review.product ?? getProduct(review.productId)?.name ?? 'NorthLeaf'}
                   </p>
                 </footer>
               </article>

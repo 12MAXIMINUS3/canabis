@@ -144,3 +144,44 @@ items not enumerable, wrong email returns zero rows, and both function validatio
 | Vendors | — | `vendor_applications` |
 | Checkout | — | `create_order()` → `orders` + `order_items` |
 | Order tracking | `track_order()` | — |
+
+## Admin dashboard
+
+`/admin` is a staff area for orders, customer messages, vendor applications,
+subscribers and stock. There is a discreet "Staff" link in the footer.
+
+Sign in with a Supabase account whose email appears in the `admin_users` table.
+
+### How access is decided
+
+Being signed in is not enough. `is_admin()` checks the signed-in email against the
+`admin_users` allowlist, and every admin policy calls it:
+
+```sql
+insert into public.admin_users (email, note) values ('someone@example.com', 'Ops');
+```
+
+`admin_users` has RLS enabled and **no policies at all**, so the allowlist itself is
+invisible and unwritable from the browser — only the security-definer `is_admin()`
+reads it. Removing a row removes access immediately, with no redeploy.
+
+The React route guard only decides what to render. The real boundary is in Postgres:
+a signed-in non-admin gets zero rows from every admin table and `admin_stats()`
+returns zeros rather than revealing whether data exists. Verified with a throwaway
+account — 10/10 isolation checks passed.
+
+### What an admin can do
+
+| Area | Capability |
+| --- | --- |
+| Overview | Order count, revenue, messages, subscribers, applications, stock |
+| Orders | Read every order, expand line items, change status |
+| Products | Toggle stock (prices and copy are editable via the same policy) |
+| Messages / Vendors / Subscribers | Read submissions, reply by email |
+
+### Adding or removing an admin
+
+1. Add the address: `insert into public.admin_users (email) values ('...');`
+2. Create the Supabase auth user (Dashboard → Authentication → Add user).
+
+To revoke, delete the row from `admin_users`. The account can still sign in but sees nothing.

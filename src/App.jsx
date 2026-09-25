@@ -9,6 +9,7 @@ import ScrollToTop from './components/ScrollToTop';
 import { pageFade } from './components/Motion';
 import { CartProvider } from './context/CartContext';
 import { CatalogProvider } from './context/CatalogContext';
+import { AdminProvider } from './context/AdminContext';
 import { ToastProvider } from './context/ToastContext';
 
 import Home from './pages/Home';
@@ -31,6 +32,7 @@ import Account from './pages/Account';
 import CartPage from './pages/CartPage';
 import Checkout from './pages/Checkout';
 import Legal from './pages/Legal';
+import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 
 /** /category/:slug is a friendlier alias for /shop?category=:slug. */
@@ -80,6 +82,9 @@ function AnimatedRoutes() {
           <Route path="/terms" element={<Legal doc="terms" />} />
           <Route path="/responsible-use" element={<Legal doc="responsible-use" />} />
 
+          {/* Staff area — the database enforces who may actually read anything */}
+          <Route path="/admin" element={<Admin />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
@@ -92,6 +97,7 @@ export default function App() {
     // reducedMotion="user" hands control to the OS "reduce motion" setting.
     <MotionConfig reducedMotion="user">
       <ToastProvider>
+        <AdminProvider>
         <CatalogProvider>
         <CartProvider>
           <ScrollToTop />
@@ -108,6 +114,7 @@ export default function App() {
           <CartDrawer />
         </CartProvider>
         </CatalogProvider>
+        </AdminProvider>
       </ToastProvider>
     </MotionConfig>
   );

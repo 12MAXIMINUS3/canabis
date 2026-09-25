@@ -186,3 +186,53 @@ export async function trackOrder(orderNumber, email) {
   if (error) return { ok: false, error };
   return { ok: Boolean(data?.length), order: data?.[0] ?? null };
 }
+
+/* ---------------- reviews page ---------------- */
+
+/** Featured site reviews, newest first. Falls back to the bundled set. */
+export async function fetchFeaturedReviews(fallback) {
+  const { data } = await tryQuery((db) =>
+    db
+      .from('product_reviews')
+      .select('author, rating, review_date, body, title, location, product_id')
+      .eq('featured', true)
+      .order('created_at', { ascending: false }),
+  );
+  if (!data?.length) return { reviews: fallback, live: false };
+
+  return {
+    reviews: data.map((r) => ({
+      name: r.author,
+      rating: r.rating,
+      date: r.review_date,
+      text: r.body,
+      title: r.title,
+      location: r.location,
+      productId: r.product_id,
+    })),
+    live: true,
+  };
+}
+
+/** Rating average and distribution, computed by the database view. */
+export async function fetchReviewSummary(fallback) {
+  const { data } = await tryQuery((db) => db.from('review_summary').select('*').single());
+  if (!data) return { summary: fallback, live: false };
+
+  const total = Number(data.count) || 1;
+  const pct = (n) => Math.round((Number(n) / total) * 100);
+  return {
+    summary: {
+      average: Number(data.average),
+      count: Number(data.count),
+      distribution: [
+        { stars: 5, percent: pct(data.five) },
+        { stars: 4, percent: pct(data.four) },
+        { stars: 3, percent: pct(data.three) },
+        { stars: 2, percent: pct(data.two) },
+        { stars: 1, percent: pct(data.one) },
+      ],
+    },
+    live: true,
+  };
+}

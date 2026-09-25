@@ -71,6 +71,10 @@ export default function Footer() {
             <span>Licence #NL-000-DEMO</span>
             <span aria-hidden="true">·</span>
             <span>Please consume responsibly</span>
+            <span aria-hidden="true">·</span>
+            <Link to="/admin" className="transition-colors hover:text-mint-300">
+              Staff
+            </Link>
           </p>
         </div>
       </div>

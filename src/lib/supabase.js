@@ -18,7 +18,9 @@ export const isConfigured = Boolean(url && anonKey);
 
 export const supabase = isConfigured
   ? createClient(url, anonKey, {
-      auth: { persistSession: false },
+      // The storefront needs no session, but the staff dashboard does — without
+      // persistence an admin is signed out by every page refresh.
+      auth: { persistSession: true, autoRefreshToken: true, storageKey: 'northleaf.auth' },
       global: { headers: { 'x-application-name': 'northleaf-web' } },
     })
   : null;

@@ -86,7 +86,9 @@ export default function Shop() {
         break;
     }
     return sorted;
-  }, [selectedCategories.join(','), tag, filters]);
+    // `products` and `maxPrice` belong here: the catalogue arrives from Supabase
+    // after the first render, and the price cap depends on it.
+  }, [products, maxPrice, selectedCategories.join(','), tag, filters]);
 
   // Any filter change starts the list over at one page.
   useEffect(() => {
