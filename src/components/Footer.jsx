@@ -24,7 +24,7 @@ export default function Footer() {
             </span>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-sand-100/60">
-            A licensed, fictional Canadian dispensary built as a design demo. Lab-tested products, plain packaging and
+            A licensed, fictional dispensary built as a design demo. Lab-tested products, plain packaging and
             shipping that arrives when we say it will.
           </p>
 

@@ -54,7 +54,7 @@ function HeroBackdrop() {
 
 const HERO_STATS = [
   { value: '100%', label: 'Batch lab-tested' },
-  { value: '1–3 days', label: 'Canada-wide delivery' },
+  { value: '1–3 days', label: 'Tracked delivery' },
   { value: '12k+', label: 'Verified reviews' },
 ];
 
@@ -71,19 +71,19 @@ function Hero() {
         <motion.div variants={container} initial="hidden" animate="show">
           <motion.p variants={item} className="eyebrow">
             <Sparkle className="h-3.5 w-3.5" />
-            Licensed Canadian retailer
+            Fresh drops every week
           </motion.p>
 
           <motion.h1
             variants={item}
             className="mt-5 text-[2.6rem] font-extrabold leading-[1.05] sm:text-6xl lg:text-[4.1rem]"
           >
-            Premium Cannabis, <span className="text-gradient">Delivered Discreetly</span> Across Canada
+            Fresh Deals, <span className="text-gradient">Ready for Delivery</span>
           </motion.h1>
 
           <motion.p variants={item} className="mt-6 max-w-xl text-lg leading-relaxed text-ink-500">
             Every batch is grown in small lots, third-party lab-tested for potency and purity, and shipped in plain,
-            odour-sealed packaging that reaches most of the country in one to three days.
+            odour-sealed packaging that reaches your door in one to three days.
           </motion.p>
 
           <motion.div variants={item} className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -186,7 +186,7 @@ function Hero() {
 
 const FEATURES = [
   { Icon: Beaker, title: 'Lab-Tested', copy: 'Every batch screened for potency, pesticides and microbials.' },
-  { Icon: Truck, title: 'Fast Shipping', copy: 'Tracked delivery in one to three days across most provinces.' },
+  { Icon: Truck, title: 'Fast Shipping', copy: 'Tracked delivery in one to three days to most addresses.' },
   { Icon: Package, title: 'Discreet Packaging', copy: 'Plain, odour-sealed boxes with no logos or product names.' },
   { Icon: Lock, title: 'Secure Checkout', copy: 'Encrypted payments, and we never store your card details.' },
 ];
@@ -250,8 +250,8 @@ function Compliance() {
           <p className="eyebrow">Trust &amp; compliance</p>
           <h2 className="mt-3 text-3xl font-extrabold sm:text-4xl">Regulated, tested and honest about it</h2>
           <p className="mt-4 text-base leading-relaxed text-ink-500">
-            NorthLeaf is a fictional storefront, but it is modelled on how a licensed Canadian retailer actually has to
-            operate: verified age, sealed products, published lab results and no marketing aimed at anyone under 19.
+            NorthLeaf is a fictional storefront, but it is modelled on how a licensed retailer actually has to operate:
+            verified age, sealed products, published lab results and no marketing aimed at anyone under 19.
           </p>
           <Link to="/about" className="btn btn-md btn-secondary mt-7">
             Read our standards
