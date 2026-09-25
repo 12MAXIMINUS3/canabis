@@ -1,6 +1,6 @@
 # Photo credits
 
-All 40 photographs in `public/images/` come from [Pexels](https://www.pexels.com) and are used under the
+All photographs in `public/images/` come from [Pexels](https://www.pexels.com) and are used under the
 [Pexels licence](https://www.pexels.com/license/): free for commercial and non-commercial use, no attribution
 required, no permission needed. Attribution is given here anyway because it costs nothing.
 
@@ -73,6 +73,36 @@ Each source photo can be viewed at `https://www.pexels.com/photo/<id>/`.
 | blog-dosing.jpg | 8139067 |
 | blog-storage.jpg | 7852573 |
 | blog-harvest.jpg | 8658545 |
+
+
+## Hero backdrop — `public/images/hero/`
+
+Reserved for the homepage hero and used nowhere else.
+
+| File | Pexels ID |
+| --- | --- |
+| 01-trichomes.jpg | 30682042 |
+| 02-bud-dark.jpg | 34246666 |
+| 03-purple-bud.jpg | 35483695 |
+| 04-greenhouse.jpg | 5810703 |
+| 05-grow-lights.jpg | 5258391 |
+| 06-plant-detail.jpg | 7584665 |
+| 07-frosty-bud.jpg | 33856592 |
+| 08-plant-rows.jpg | 20809624 |
+
+## Hero video — `public/video/`
+
+| File | Pexels video ID |
+| --- | --- |
+| hero-leaves.mp4 | 7667040 |
+| hero-leaves-sd.mp4 | 7667040 |
+
+## Catalogue expansion
+
+The catalogue grew from 14 products to 60 (ten per category). The 46 additional
+product photographs are named after the product they belong to in
+`public/images/products/`, and each is a distinct Pexels photograph. Source IDs
+are recorded in the download scripts and in this repository's commit history.
 
 Every file above is a distinct photograph — no image is reused anywhere in the site.
 Verified with `find public/images -name '*.jpg' -exec md5sum {} + | awk '{print $1}' | sort | uniq -d`

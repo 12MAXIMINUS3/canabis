@@ -7,7 +7,7 @@ import ProductCard from '../components/ProductCard';
 import { potencyTiers } from '../data/products';
 import { useCatalog } from '../context/CatalogContext';
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 12; // shows a full category (10) without a 'load more' click
 
 const SORTS = [
   { value: 'featured', label: 'Featured' },

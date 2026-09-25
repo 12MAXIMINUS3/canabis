@@ -10,54 +10,56 @@
  *    instead. Drop a real path in here later and the card picks it up.
  */
 
+import { extraProducts } from './products-extra.js';
+
 export const categories = [
   {
     slug: 'flower',
     name: 'Flower',
     description: 'Hand-trimmed, slow-cured buds in small batches.',
-    meta: '24 strains',
+    meta: '10 strains',
     imageUrl: '/images/categories/flower.jpg',
   },
   {
     slug: 'edibles',
     name: 'Edibles',
     description: 'Precisely dosed gummies, chocolate and brewing teas.',
-    meta: '18 items',
+    meta: '10 items',
     imageUrl: '/images/categories/edibles.jpg',
   },
   {
     slug: 'vapes',
     name: 'Vapes',
     description: 'Ceramic-coil carts and rechargeable all-in-ones.',
-    meta: '12 items',
+    meta: '10 items',
     imageUrl: '/images/categories/vapes.jpg',
   },
   {
     slug: 'concentrates',
     name: 'Concentrates',
     description: 'Solventless live rosin, badder and pressed hash.',
-    meta: '9 items',
+    meta: '10 items',
     imageUrl: '/images/categories/concentrates.jpg',
   },
   {
     slug: 'cbd',
     name: 'CBD',
     description: 'Low-THC oils, balms and softgels for daily calm.',
-    meta: '15 items',
+    meta: '10 items',
     imageUrl: '/images/categories/cbd.jpg',
   },
   {
     slug: 'accessories',
     name: 'Accessories',
     description: 'Grinders, glass and storage built to outlast trends.',
-    meta: '21 items',
+    meta: '10 items',
     imageUrl: '/images/categories/accessories.jpg',
   },
 ];
 
 export const categoryBySlug = Object.fromEntries(categories.map((c) => [c.slug, c]));
 
-export const products = [
+const baseProducts = [
   {
     id: 'aurora-haze',
     name: 'Aurora Haze',
@@ -503,6 +505,9 @@ export const products = [
     reviews: [{ name: 'Leo G.', rating: 4, date: 'Apr 2026', text: 'Handsome jar. The lid takes a firm hand at first.' }],
   },
 ];
+
+/** The full shelf: the lots below plus everything in products-extra.js. */
+export const products = [...baseProducts, ...extraProducts];
 
 /* ---------- small helpers used across pages ---------- */
 
