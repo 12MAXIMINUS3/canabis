@@ -17,7 +17,7 @@ import SectionHeading from '../components/SectionHeading';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
 import Newsletter from '../components/Newsletter';
-import { bestSellers, categories } from '../data/products';
+import { useCatalog } from '../context/CatalogContext';
 
 /* ------------------------------------------------------------------ */
 /* Hero                                                                */
@@ -282,6 +282,8 @@ function Compliance() {
 /* ------------------------------------------------------------------ */
 
 export default function Home() {
+  const { bestSellers, categories } = useCatalog();
+
   return (
     <>
       <Hero />

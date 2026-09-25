@@ -5,6 +5,7 @@ import PageHero from '../components/PageHero';
 import SectionHeading from '../components/SectionHeading';
 import { vendorCriteria } from '../data/content';
 import { useToast } from '../context/ToastContext';
+import { submitVendorApplication } from '../context/CatalogContext';
 
 const PRODUCT_TYPES = ['Flower', 'Pre-rolls', 'Concentrates', 'Edibles', 'Vapes', 'CBD', 'Accessories'];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -38,8 +39,13 @@ export default function Vendors() {
     }
 
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 650));
+    const result = await submitVendorApplication(values);
     setSubmitting(false);
+
+    if (!result.ok) {
+      setErrors({ notes: 'We could not submit that. Please try again in a moment.' });
+      return;
+    }
     setValues(EMPTY);
     push('Application received', { detail: 'Sourcing reviews submissions every Thursday.' });
   };
@@ -136,7 +142,7 @@ export default function Vendors() {
           <Reveal delay={0.1}>
             <form onSubmit={submit} noValidate className="card p-6 sm:p-8">
               <h2 className="font-display text-lg font-bold">Tell us about the lot</h2>
-              <p className="mt-1 text-sm text-ink-500">Demo form — nothing is sent anywhere.</p>
+              <p className="mt-1 text-sm text-ink-500">We read every submission and reply within a week.</p>
 
               <div className="mt-6 grid gap-5 sm:grid-cols-2">
                 <div>

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, ChevronDown, Clock, Mail, MapPin, ShieldCheck } from '../components/Icons';
 import { EASE, Reveal, StaggerGrid, StaggerItem } from '../components/Motion';
 import { useToast } from '../context/ToastContext';
+import { sendContactMessage } from '../context/CatalogContext';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -60,9 +61,13 @@ export default function Contact() {
     }
 
     setSubmitting(true);
-    // Stand-in for a real POST — there is no backend in this demo.
-    await new Promise((resolve) => setTimeout(resolve, 600));
+    const result = await sendContactMessage(values);
     setSubmitting(false);
+
+    if (!result.ok) {
+      setErrors({ message: 'We could not send that. Please try again in a moment.' });
+      return;
+    }
     setValues(EMPTY);
     push('Message sent', { detail: 'We reply within one business day.' });
   };
@@ -186,7 +191,7 @@ export default function Contact() {
 
           <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-ink-400">
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-leaf-600" />
-            This is a demo form. Nothing is transmitted or stored anywhere.
+            Messages are stored securely and only read by the support team.
           </p>
         </motion.form>
 

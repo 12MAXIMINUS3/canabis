@@ -8,6 +8,7 @@ import Header from './components/Header';
 import ScrollToTop from './components/ScrollToTop';
 import { pageFade } from './components/Motion';
 import { CartProvider } from './context/CartContext';
+import { CatalogProvider } from './context/CatalogContext';
 import { ToastProvider } from './context/ToastContext';
 
 import Home from './pages/Home';
@@ -91,6 +92,7 @@ export default function App() {
     // reducedMotion="user" hands control to the OS "reduce motion" setting.
     <MotionConfig reducedMotion="user">
       <ToastProvider>
+        <CatalogProvider>
         <CartProvider>
           <ScrollToTop />
           <AgeGate />
@@ -105,6 +107,7 @@ export default function App() {
 
           <CartDrawer />
         </CartProvider>
+        </CatalogProvider>
       </ToastProvider>
     </MotionConfig>
   );

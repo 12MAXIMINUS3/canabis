@@ -5,6 +5,7 @@ import { ArrowLeft, Check, IdCard, Lock, ShieldCheck } from '../components/Icons
 import { EASE, Reveal } from '../components/Motion';
 import { MIX_MATCH, PRICING, formatPrice, useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
+import { placeOrder } from '../context/CatalogContext';
 import { paymentMethods } from '../data/content';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -57,12 +58,21 @@ export default function Checkout() {
     }
 
     setPlacing(true);
-    await new Promise((r) => setTimeout(r, 800));
-    const orderId = `NL-${Math.floor(40000 + Math.random() * 9999)}`;
-    setPlaced({ id: orderId, total });
+    const result = await placeOrder({
+      values,
+      lines,
+      totals: { subtotal, discount, shipping, total },
+    });
     setPlacing(false);
+
+    if (!result.ok) {
+      setErrors({ email: 'We could not save that order. Please try again in a moment.' });
+      return;
+    }
+
+    setPlaced({ id: result.orderNumber, total, email: values.email.trim().toLowerCase() });
     clear();
-    push('Order placed', { detail: `${orderId} — demo only, nothing was charged.` });
+    push('Order placed', { detail: `${result.orderNumber} — no payment was taken.` });
   };
 
   const field = (name) => ({
@@ -96,8 +106,8 @@ export default function Checkout() {
           </span>
           <h1 className="mt-6 text-4xl font-extrabold">Order {placed.id}</h1>
           <p className="mt-3 text-base leading-relaxed text-ink-500">
-            In a real store you would now have an email with payment instructions and a tracking number to follow. This
-            is a demo, so nothing was charged and nothing will ship.
+            The order is saved to our system. In a live store you would now receive payment instructions and a tracking
+            number by email — this build takes no payment and ships nothing.
           </p>
 
           <dl className="mt-8 rounded-3xl bg-white p-6 text-left shadow-soft ring-1 ring-ink-900/5">
@@ -112,7 +122,11 @@ export default function Checkout() {
           </dl>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <button type="button" onClick={() => navigate('/order-tracking')} className="btn btn-lg btn-primary">
+            <button
+              type="button"
+              onClick={() => navigate(`/order-tracking?order=${placed.id}&email=${encodeURIComponent(placed.email)}`)}
+              className="btn btn-lg btn-primary"
+            >
               Track this order
             </button>
             <Link to="/shop" className="btn btn-lg btn-secondary">

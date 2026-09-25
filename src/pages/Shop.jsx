@@ -4,7 +4,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Search, Sliders, X } from '../components/Icons';
 import { EASE, StaggerGrid, StaggerItem } from '../components/Motion';
 import ProductCard from '../components/ProductCard';
-import { categories, potencyTiers, priceBounds, products } from '../data/products';
+import { potencyTiers } from '../data/products';
+import { useCatalog } from '../context/CatalogContext';
 
 const PAGE_SIZE = 8;
 
@@ -16,17 +17,20 @@ const SORTS = [
   { value: 'potency', label: 'Strongest first' },
 ];
 
-const DEFAULTS = { maxPrice: priceBounds.max, thc: 'any', cbd: 'any', inStockOnly: false, sort: 'featured', q: '' };
+// maxPrice null = no cap. The ceiling depends on the catalogue, which loads at runtime.
+const DEFAULTS = { maxPrice: null, thc: 'any', cbd: 'any', inStockOnly: false, sort: 'featured', q: '' };
 
 export default function Shop() {
   // Selected categories live in the URL, so /shop?category=flower is shareable
   // and the links from the home page and footer just work.
+  const { products, categories, priceBounds, loading } = useCatalog();
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedCategories = searchParams.getAll('category');
   // `?tag=indica` narrows to a sub-type — the header's category dropdowns use it.
   const tag = (searchParams.get('tag') ?? '').toLowerCase();
 
   const [filters, setFilters] = useState(DEFAULTS);
+  const maxPrice = filters.maxPrice ?? priceBounds.max;
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [panelOpen, setPanelOpen] = useState(false);
 
@@ -52,7 +56,7 @@ export default function Shop() {
     const filtered = products.filter((p) => {
       if (selectedCategories.length && !selectedCategories.includes(p.category)) return false;
       if (tag && !`${p.type} ${p.name} ${p.effects.join(' ')}`.toLowerCase().includes(tag)) return false;
-      if (p.price > filters.maxPrice) return false;
+      if (p.price > maxPrice) return false;
       if (filters.thc !== 'any' && p.thcTier !== filters.thc) return false;
       if (filters.cbd !== 'any' && p.cbdTier !== filters.cbd) return false;
       if (filters.inStockOnly && !p.inStock) return false;
@@ -91,7 +95,7 @@ export default function Shop() {
 
   const activeCount =
     selectedCategories.length +
-    (filters.maxPrice < priceBounds.max ? 1 : 0) +
+    (filters.maxPrice != null && filters.maxPrice < priceBounds.max ? 1 : 0) +
     (filters.thc !== 'any' ? 1 : 0) +
     (filters.cbd !== 'any' ? 1 : 0) +
     (filters.inStockOnly ? 1 : 0) +
@@ -127,7 +131,7 @@ export default function Shop() {
         <label htmlFor="max-price" className="label">
           Max price
           <span className="ml-2 font-bold normal-case tracking-normal text-leaf-700 tabular-nums">
-            ${filters.maxPrice}
+            ${maxPrice}
           </span>
         </label>
         <input
@@ -136,7 +140,7 @@ export default function Shop() {
           min={priceBounds.min}
           max={priceBounds.max}
           step={1}
-          value={filters.maxPrice}
+          value={maxPrice}
           onChange={(e) => set({ maxPrice: Number(e.target.value) })}
           className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-sand-200 accent-leaf-700"
         />

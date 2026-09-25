@@ -4,7 +4,7 @@ import { Cart, Check } from './Icons';
 import { EASE } from './Motion';
 import Rating from './Rating';
 import Thumb from './Thumb';
-import { categoryBySlug } from '../data/products';
+import { useCatalog } from '../context/CatalogContext';
 import { formatPrice, useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 
@@ -15,6 +15,7 @@ import { useToast } from '../context/ToastContext';
  */
 export default function ProductCard({ product, detailed = false, className = '' }) {
   const { add, lines } = useCart();
+  const { categoryBySlug } = useCatalog();
   const { push } = useToast();
   const inCart = lines.find((l) => l.id === product.id);
 

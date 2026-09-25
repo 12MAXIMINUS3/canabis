@@ -89,3 +89,58 @@ src/
 ## Images
 
 40 distinct Pexels-licensed photographs live in `public/images/`. No image is reused anywhere in the site. See [CREDITS.md](CREDITS.md) for the full list of source IDs.
+
+## Backend (Supabase)
+
+The storefront reads its catalogue from Supabase and writes real rows for newsletter
+signups, contact messages, vendor applications and orders. If the environment variables
+are missing it falls back to the bundled mock data in `src/data/products.js`, so a fresh
+clone still runs with no setup.
+
+### Setup
+
+```bash
+cp .env.example .env.local     # fill in your project URL + anon key
+```
+
+Then apply the schema and seed the catalogue:
+
+```bash
+SUPABASE_PAT=sbp_... SUPABASE_PROJECT_REF=xxxx node scripts/supabase-setup.mjs
+```
+
+The token is only read from the environment — it is never written to a file. Both SQL
+files can also be pasted straight into the Supabase SQL editor.
+
+| File | Contents |
+| --- | --- |
+| `supabase/schema.sql` | Tables, indexes, RLS policies, `track_order()` |
+| `supabase/orders.sql` | `create_order()` and the order-number sequence |
+| `scripts/supabase-setup.mjs` | Applies both, then seeds products/categories/reviews |
+
+### Security model
+
+Only the anon key reaches the browser, and every table has Row Level Security on:
+
+- **Catalogue** (`products`, `categories`, `product_reviews`) — world-readable, not writable.
+- **Submissions** (`newsletter_subscribers`, `contact_messages`, `vendor_applications`) —
+  insert-only. A visitor can post one but cannot read anybody's back, including their own.
+- **Orders** — no direct insert and no select. Placement goes through `create_order()`,
+  a security-definer function that validates input and issues the order number from a
+  sequence, so the browser cannot choose its own. Reading goes through `track_order()`,
+  which requires the order number **and** the email to match, so order numbers cannot be
+  walked through.
+
+Verified against the live project: catalogue writes rejected (42501), orders and order
+items not enumerable, wrong email returns zero rows, and both function validations fire.
+
+### Data flow
+
+| Page | Reads | Writes |
+| --- | --- | --- |
+| Home, Shop, Product, Deals, Mix & Match | `products`, `categories`, `product_reviews` | — |
+| Newsletter (footer/home/blog) | — | `newsletter_subscribers` |
+| Contact | — | `contact_messages` |
+| Vendors | — | `vendor_applications` |
+| Checkout | — | `create_order()` → `orders` + `order_items` |
+| Order tracking | `track_order()` | — |

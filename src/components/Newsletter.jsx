@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Mail } from './Icons';
 import { Reveal } from './Motion';
 import { useToast } from '../context/ToastContext';
+import { subscribeToNewsletter } from '../context/CatalogContext';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -11,15 +12,29 @@ export default function Newsletter() {
   const [error, setError] = useState('');
   const { push } = useToast();
 
-  const submit = (e) => {
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e) => {
     e.preventDefault();
     if (!EMAIL_RE.test(email.trim())) {
       setError('Enter an email address we can actually reach.');
       return;
     }
     setError('');
+    setBusy(true);
+    const result = await subscribeToNewsletter(email, 'newsletter');
+    setBusy(false);
+
+    if (!result.ok) {
+      setError('Something went wrong on our end. Try again in a moment.');
+      return;
+    }
     setEmail('');
-    push('Subscribed to newsletter', { detail: 'Drop notices and restocks, about twice a month.' });
+    push(result.duplicate ? 'You are already on the list' : 'Subscribed to newsletter', {
+      detail: result.duplicate
+        ? 'No need to sign up twice.'
+        : 'Drop notices and restocks, about twice a month.',
+    });
   };
 
   return (
@@ -81,8 +96,8 @@ export default function Newsletter() {
                 aria-describedby={error ? 'newsletter-error' : undefined}
                 className="field flex-1 border-white/15 bg-white/10 text-white placeholder:text-white/40 focus:border-mint-300"
               />
-              <button type="submit" className="btn btn-md bg-white px-6 text-leaf-800 hover:bg-mint-100">
-                Subscribe
+              <button type="submit" disabled={busy} className="btn btn-md bg-white px-6 text-leaf-800 hover:bg-mint-100">
+                {busy ? 'Subscribing…' : 'Subscribe'}
                 <ArrowRight className="h-4 w-4" />
               </button>
             </div>

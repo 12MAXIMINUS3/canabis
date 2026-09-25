@@ -5,11 +5,12 @@ import { EASE, Reveal, StaggerGrid, StaggerItem } from '../components/Motion';
 import PageHero from '../components/PageHero';
 import ProductCard from '../components/ProductCard';
 import SectionHeading from '../components/SectionHeading';
-import { products } from '../data/products';
+import { useCatalog } from '../context/CatalogContext';
 import { MIX_MATCH, PRICING, formatPrice, useCart } from '../context/CartContext';
 
 export default function Deals() {
   const { subtotal } = useCart();
+  const { products } = useCatalog();
 
   // "On offer" here means anything we have flagged with a badge, plus the last
   // units of a lot — the two things that actually move price in a small shop.

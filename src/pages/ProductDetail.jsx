@@ -17,7 +17,7 @@ import { EASE, Reveal, StaggerGrid, StaggerItem } from '../components/Motion';
 import ProductCard from '../components/ProductCard';
 import Rating from '../components/Rating';
 import Thumb from '../components/Thumb';
-import { categoryBySlug, getProduct, relatedTo } from '../data/products';
+import { useCatalog } from '../context/CatalogContext';
 import { formatPrice, useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 
@@ -29,6 +29,7 @@ const SHIPPING_NOTES = [
 
 export default function ProductDetail() {
   const { id } = useParams();
+  const { categoryBySlug, getProduct, relatedTo, loading } = useCatalog();
   const product = getProduct(id);
 
   const [qty, setQty] = useState(1);

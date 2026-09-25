@@ -1,38 +1,110 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, Check, Package, Search, Truck } from '../components/Icons';
 import { EASE, Reveal } from '../components/Motion';
 import PageHero from '../components/PageHero';
 import { trackedOrder } from '../data/content';
 import { useToast } from '../context/ToastContext';
+import { trackOrder } from '../context/CatalogContext';
+import { formatPrice } from '../context/CartContext';
 
 /**
- * Mock order lookup. The demo recognises one order number (NL-48213) with any
- * email; anything else produces the "not found" state so both paths are visible.
+ * Real order lookup, backed by the `track_order` database function, which only
+ * returns a row when the order number AND the email both match — so the form
+ * cannot be used to walk through other people's order numbers.
+ *
+ * The seeded demo order (NL-48213) is still recognised without an email, so the
+ * page has something to show before you have placed one.
  */
+
+/** Builds a delivery timeline from an order status. */
+function stepsFor(status) {
+  const sequence = [
+    { label: 'Order received', detail: 'Payment confirmed' },
+    { label: 'Packed', detail: 'Sealed in plain packaging, lab sheet enclosed' },
+    { label: 'Handed to courier', detail: 'Tracked, signature required' },
+    { label: 'In transit', detail: 'On its way to you' },
+    { label: 'Delivered', detail: 'ID checked at the door' },
+  ];
+  const reached = { Received: 1, Packed: 2, Shipped: 3, 'In transit': 4, Delivered: 5 }[status] ?? 1;
+  return sequence.map((step, i) => ({ ...step, done: i < reached }));
+}
+
 export default function OrderTracking() {
-  const [form, setForm] = useState({ order: '', email: '' });
+  const [params] = useSearchParams();
+  const [form, setForm] = useState({ order: params.get('order') ?? '', email: params.get('email') ?? '' });
   const [status, setStatus] = useState('idle'); // idle | searching | found | missing
+  const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const { push } = useToast();
 
-  const submit = async (e) => {
-    e.preventDefault();
-    if (!form.order.trim()) {
-      setError('Enter the order number from your confirmation email.');
-      return;
-    }
-    setError('');
-    setStatus('searching');
-    await new Promise((r) => setTimeout(r, 600));
+  const lookup = useCallback(
+    async (order, email) => {
+      if (!order.trim()) {
+        setError('Enter the order number from your confirmation email.');
+        return;
+      }
+      setError('');
+      setStatus('searching');
 
-    if (form.order.trim().toUpperCase().replace(/\s/g, '') === trackedOrder.id) {
-      setStatus('found');
-      push('Order found', { detail: `${trackedOrder.id} — ${trackedOrder.eta}` });
-    } else {
+      const normalised = order.trim().toUpperCase().replace(/\s/g, '');
+
+      // The seeded sample order, so the page is demonstrable without an account.
+      if (normalised === trackedOrder.id) {
+        setResult({
+          number: trackedOrder.id,
+          status: 'Delivered',
+          carrier: trackedOrder.carrier,
+          tracking: trackedOrder.tracking,
+          steps: trackedOrder.steps,
+          total: null,
+          items: [],
+        });
+        setStatus('found');
+        push('Order found', { detail: `${trackedOrder.id} — ${trackedOrder.eta}` });
+        return;
+      }
+
+      const res = await trackOrder(order, email);
+
+      if (res.ok && res.order) {
+        const o = res.order;
+        setResult({
+          number: o.order_number,
+          status: o.status,
+          carrier: 'NorthPost Tracked',
+          tracking: `NP${o.order_number.replace(/\D/g, '')} ${new Date(o.created_at).getFullYear()}`,
+          steps: stepsFor(o.status),
+          total: Number(o.total),
+          items: o.items ?? [],
+          placedAt: new Date(o.created_at).toLocaleDateString('en-CA', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          }),
+        });
+        setStatus('found');
+        push('Order found', { detail: `${o.order_number} — ${o.status}` });
+        return;
+      }
+
       setStatus('missing');
-    }
+    },
+    [push],
+  );
+
+  // Arriving from checkout with ?order=&email= looks the order up immediately.
+  useEffect(() => {
+    const order = params.get('order');
+    const email = params.get('email');
+    if (order && email) lookup(order, email);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const submit = (e) => {
+    e.preventDefault();
+    lookup(form.order, form.email);
   };
 
   return (
@@ -41,7 +113,7 @@ export default function OrderTracking() {
         compact
         eyebrow="Order tracking"
         title="Where is my parcel?"
-        copy="Enter the order number from your confirmation email. Tracking usually goes live within an hour of the courier collecting it."
+        copy="Enter the order number and the email you ordered with. Tracking usually goes live within an hour of the courier collecting it."
         image="/images/editorial/tracking.jpg"
         alt="Parcels waiting on a front porch"
       />
@@ -52,7 +124,7 @@ export default function OrderTracking() {
           <form onSubmit={submit} noValidate className="card p-6 sm:p-8">
             <h2 className="font-display text-lg font-bold">Look up an order</h2>
             <p className="mt-1 text-sm text-ink-500">
-              Demo tip: try <code className="rounded bg-sand-100 px-1.5 py-0.5 font-semibold">NL-48213</code>.
+              No order yet? Try the sample: <code className="rounded bg-sand-100 px-1.5 py-0.5 font-semibold">NL-48213</code>
             </p>
 
             <div className="mt-6">
@@ -81,7 +153,7 @@ export default function OrderTracking() {
 
             <div className="mt-5">
               <label htmlFor="order-email" className="label">
-                Email on the order <span className="normal-case text-ink-400">(optional)</span>
+                Email on the order
               </label>
               <input
                 id="order-email"
@@ -91,6 +163,9 @@ export default function OrderTracking() {
                 placeholder="you@example.ca"
                 className="field"
               />
+              <p className="mt-1.5 text-xs text-ink-400">
+                Required for real orders — it is what proves the order is yours.
+              </p>
             </div>
 
             <button type="submit" disabled={status === 'searching'} className="btn btn-lg btn-primary mt-7 w-full">
@@ -116,7 +191,7 @@ export default function OrderTracking() {
         {/* Result */}
         <div>
           <AnimatePresence mode="wait">
-            {status === 'found' && (
+            {status === 'found' && result && (
               <motion.div
                 key="found"
                 initial={{ opacity: 0, y: 16 }}
@@ -128,25 +203,39 @@ export default function OrderTracking() {
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-ink-400">Order</p>
-                    <p className="font-display text-2xl font-extrabold">{trackedOrder.id}</p>
+                    <p className="font-display text-2xl font-extrabold">{result.number}</p>
+                    {result.placedAt && <p className="mt-0.5 text-xs text-ink-400">Placed {result.placedAt}</p>}
                   </div>
-                  <span className="chip border-leaf-700 bg-leaf-700 text-white">Delivered</span>
+                  <span className="chip border-leaf-700 bg-leaf-700 text-white">{result.status}</span>
                 </div>
 
                 <dl className="mt-6 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl bg-sand-100 p-4">
                     <dt className="text-[11px] font-bold uppercase tracking-wider text-ink-500">Carrier</dt>
-                    <dd className="mt-0.5 text-sm font-semibold">{trackedOrder.carrier}</dd>
+                    <dd className="mt-0.5 text-sm font-semibold">{result.carrier}</dd>
                   </div>
                   <div className="rounded-2xl bg-sand-100 p-4">
-                    <dt className="text-[11px] font-bold uppercase tracking-wider text-ink-500">Tracking</dt>
-                    <dd className="mt-0.5 text-sm font-semibold tabular-nums">{trackedOrder.tracking}</dd>
+                    <dt className="text-[11px] font-bold uppercase tracking-wider text-ink-500">
+                      {result.total != null ? 'Order total' : 'Tracking'}
+                    </dt>
+                    <dd className="mt-0.5 text-sm font-semibold tabular-nums">
+                      {result.total != null ? formatPrice(result.total) : result.tracking}
+                    </dd>
                   </div>
                 </dl>
 
-                {/* Timeline */}
+                {result.items.length > 0 && (
+                  <ul className="mt-5 space-y-1.5 rounded-2xl bg-leaf-50 p-4">
+                    {result.items.map((item) => (
+                      <li key={item.name} className="text-sm text-ink-600">
+                        {item.name} <span className="text-ink-400">× {item.quantity}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
                 <ol className="mt-8 space-y-0">
-                  {trackedOrder.steps.map((step, i) => (
+                  {result.steps.map((step, i) => (
                     <motion.li
                       key={step.label}
                       initial={{ opacity: 0, x: -10 }}
@@ -154,16 +243,25 @@ export default function OrderTracking() {
                       transition={{ delay: 0.08 * i, duration: 0.3, ease: EASE }}
                       className="relative flex gap-4 pb-6 last:pb-0"
                     >
-                      {i < trackedOrder.steps.length - 1 && (
-                        <span aria-hidden="true" className="absolute left-[13px] top-7 h-full w-px bg-leaf-200" />
+                      {i < result.steps.length - 1 && (
+                        <span
+                          aria-hidden="true"
+                          className={`absolute left-[13px] top-7 h-full w-px ${step.done ? 'bg-leaf-200' : 'bg-sand-200'}`}
+                        />
                       )}
-                      <span className="relative z-10 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-leaf-600 text-white">
+                      <span
+                        className={`relative z-10 grid h-7 w-7 shrink-0 place-items-center rounded-full ${
+                          step.done ? 'bg-leaf-600 text-white' : 'border border-sand-300 bg-white text-sand-400'
+                        }`}
+                      >
                         <Check className="h-3.5 w-3.5" />
                       </span>
                       <div className="flex-1">
                         <div className="flex flex-wrap items-baseline justify-between gap-2">
-                          <p className="font-display text-sm font-bold">{step.label}</p>
-                          <p className="text-xs text-ink-400 tabular-nums">{step.date}</p>
+                          <p className={`font-display text-sm font-bold ${step.done ? '' : 'text-ink-400'}`}>
+                            {step.label}
+                          </p>
+                          {step.date && <p className="text-xs text-ink-400 tabular-nums">{step.date}</p>}
                         </div>
                         <p className="mt-0.5 text-sm text-ink-500">{step.detail}</p>
                       </div>
@@ -186,10 +284,10 @@ export default function OrderTracking() {
                   <Package className="h-7 w-7" />
                 </span>
                 <div>
-                  <h2 className="font-display text-xl font-bold">No order with that number</h2>
+                  <h2 className="font-display text-xl font-bold">No order matched</h2>
                   <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-ink-500">
-                    Check the confirmation email — order numbers look like NL-48213. If it still will not find it, we
-                    can look it up by email address.
+                    Both the order number and the email have to match the order exactly. Check the confirmation email —
+                    numbers look like NL-48213.
                   </p>
                 </div>
                 <Link to="/contact" className="btn btn-md btn-primary">

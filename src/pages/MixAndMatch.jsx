@@ -6,12 +6,13 @@ import { EASE, Reveal, StaggerGrid, StaggerItem } from '../components/Motion';
 import PageHero from '../components/PageHero';
 import ProductCard from '../components/ProductCard';
 import SectionHeading from '../components/SectionHeading';
-import { categories, products } from '../data/products';
+import { useCatalog } from '../context/CatalogContext';
 import { mixMatchSteps } from '../data/content';
 import { MIX_MATCH, formatPrice, useCart } from '../context/CartContext';
 
 export default function MixAndMatch() {
   const { eligibleUnits, discount, openCart } = useCart();
+  const { products, categories } = useCatalog();
   const [filter, setFilter] = useState('all');
 
   const eligibleCategories = categories.filter((c) => MIX_MATCH.categories.includes(c.slug));
