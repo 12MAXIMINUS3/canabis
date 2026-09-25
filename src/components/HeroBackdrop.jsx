@@ -14,13 +14,17 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
  * showing. There is no blank frame and nothing to detect.
  */
 
+// Reserved for the hero. These eight are used nowhere else on the site, so the
+// backdrop never repeats a photo the visitor has already seen on a product card.
 const SLIDES = [
-  '/images/brand/hero-card.jpg',
-  '/images/categories/flower.jpg',
-  '/images/brand/process-source.jpg',
-  '/images/editorial/mix-match.jpg',
-  '/images/products/glacier-live-rosin.jpg',
-  '/images/categories/concentrates.jpg',
+  '/images/hero/01-trichomes.jpg',
+  '/images/hero/04-greenhouse.jpg',
+  '/images/hero/03-purple-bud.jpg',
+  '/images/hero/05-grow-lights.jpg',
+  '/images/hero/07-frosty-bud.jpg',
+  '/images/hero/08-plant-rows.jpg',
+  '/images/hero/02-bud-dark.jpg',
+  '/images/hero/06-plant-detail.jpg',
 ];
 
 const VIDEO_HD = '/video/hero-leaves.mp4';
