@@ -130,5 +130,6 @@ export function useCart() {
   return ctx;
 }
 
+// Plain dollar amounts — deliberately not tied to a currency code or country.
 export const formatPrice = (amount) =>
-  new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD', minimumFractionDigits: 2 }).format(amount);
+  `$${new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount)}`;

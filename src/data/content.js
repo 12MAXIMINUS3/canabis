@@ -9,7 +9,7 @@ export const orderSteps = [
   {
     step: '01',
     title: 'Create an account',
-    copy: 'Confirm you are 19+ and add a shipping address. It takes about a minute, and new accounts start with 500 Leaf Points.',
+    copy: 'Confirm you are of legal age and add a shipping address. It takes about a minute, and new accounts start with 500 Leaf Points.',
   },
   {
     step: '02',
@@ -34,7 +34,7 @@ export const orderSteps = [
 ];
 
 export const paymentMethods = [
-  { name: 'Interac e-Transfer', detail: 'Accepted Canada-wide. Instructions are emailed at checkout.', fee: 'No fee' },
+  { name: 'Interac e-Transfer', detail: 'Accepted everywhere we ship. Instructions are emailed at checkout.', fee: 'No fee' },
   { name: 'Credit card', detail: 'Visa and Mastercard, processed by an encrypted third party.', fee: '2.5% fee' },
   { name: 'Leaf Points', detail: 'Redeem points against any order, with no minimum.', fee: 'No fee' },
 ];
@@ -77,7 +77,7 @@ export const faqGroups = [
     items: [
       {
         q: 'Is there a minimum order?',
-        a: '$60 before shipping. Orders over $99 ship free; below that, flat-rate tracked shipping is $15 anywhere in Canada.',
+        a: '$60 before shipping. Orders over $99 ship free; below that, flat-rate tracked shipping is $15 wherever we deliver.',
       },
       {
         q: 'How do I pay?',
@@ -94,7 +94,7 @@ export const faqGroups = [
     items: [
       {
         q: 'Where do you ship, and how fast?',
-        a: 'Canada-wide by tracked courier. Most urban addresses see delivery in one to two business days; rural and northern routes take three to five.',
+        a: 'By tracked courier. Most urban addresses see delivery in one to two business days; rural and remote routes take three to five.',
       },
       {
         q: 'What does the package look like?',
@@ -128,7 +128,7 @@ export const faqGroups = [
     items: [
       {
         q: 'How is my age verified?',
-        a: 'You confirm 19+ before entering the store, again at checkout, and the courier checks government-issued photo ID at the door. Nobody signs on your behalf.',
+        a: 'You confirm your age before entering the store, again at checkout, and the courier checks government-issued photo ID at the door. Nobody signs on your behalf.',
       },
       {
         q: 'Can I return an order?',
@@ -438,10 +438,10 @@ export const vendorCriteria = [
 /* ---------------- Shipping & returns ---------------- */
 
 export const shippingZones = [
-  { region: 'ON, QC', time: '1–2 business days', note: 'Most Toronto, Ottawa and Montréal addresses arrive next day.' },
-  { region: 'BC, AB, MB, SK', time: '2–3 business days', note: 'Rural routes can add a day.' },
-  { region: 'NS, NB, PE, NL', time: '2–4 business days', note: 'Island addresses depend on ferry schedules.' },
-  { region: 'YT, NT, NU', time: '4–7 business days', note: 'Tracked, but northern hubs update less often.' },
+  { region: 'Major cities', time: '1–2 business days', note: 'Addresses on a daily courier route usually arrive next day.' },
+  { region: 'Suburban & regional', time: '2–3 business days', note: 'One hop through a sorting hub before the last leg.' },
+  { region: 'Rural routes', time: '2–4 business days', note: 'Delivery days can be fixed rather than daily.' },
+  { region: 'Remote & island', time: '4–7 business days', note: 'Tracked, but hubs update less often on these routes.' },
 ];
 
 export const returnRules = [
@@ -508,11 +508,11 @@ export const legalDocs = {
     title: 'Terms of Service',
     updated: '1 September 2026',
     intro:
-      'The short version: you must be of legal age in your province, orders are for personal use, and we will always tell you plainly if something goes wrong.',
+      'The short version: you must be of legal age where you live, orders are for personal use, and we will always tell you plainly if something goes wrong.',
     sections: [
       {
         heading: 'Eligibility',
-        text: 'You must be at least 19 years old (18 in Alberta, 21 in Québec) and ordering to an address in Canada. Government-issued photo ID is checked on delivery; parcels are returned if it cannot be.',
+        text: 'You must meet the legal age for cannabis where you live, and be ordering to an address we deliver to. Government-issued photo ID is checked on delivery; parcels are returned if it cannot be.',
       },
       {
         heading: 'Order limits',
@@ -520,7 +520,7 @@ export const legalDocs = {
       },
       {
         heading: 'Pricing and payment',
-        text: 'Prices are in Canadian dollars and include applicable excise duty. Sales tax is added at checkout based on your shipping province. Orders are released once payment clears.',
+        text: 'Prices include applicable duty. Sales tax is added at checkout based on your shipping address. Orders are released once payment clears.',
       },
       {
         heading: 'Personal use only',

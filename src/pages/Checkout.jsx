@@ -9,21 +9,20 @@ import { placeOrder } from '../context/CatalogContext';
 import { paymentMethods } from '../data/content';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const POSTAL_RE = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+// Postal and ZIP formats differ everywhere, so accept any plausible code.
+const POSTAL_RE = /^[A-Za-z0-9][A-Za-z0-9 -]{2,9}$/;
 
 const EMPTY = {
   email: '',
   name: '',
   address: '',
   city: '',
-  province: 'ON',
+  province: '',
   postal: '',
   phone: '',
   payment: paymentMethods[0].name,
   ageConfirmed: false,
 };
-
-const PROVINCES = ['AB', 'BC', 'MB', 'NB', 'NL', 'NS', 'NT', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT'];
 
 export default function Checkout() {
   const { lines, subtotal, discount, shipping, total, clear } = useCart();
@@ -48,7 +47,8 @@ export default function Checkout() {
     if (values.name.trim().length < 2) found.name = 'Name as it appears on your ID.';
     if (values.address.trim().length < 4) found.address = 'Street address, please.';
     if (values.city.trim().length < 2) found.city = 'Which city?';
-    if (!POSTAL_RE.test(values.postal.trim())) found.postal = 'Canadian postal code, like M6G 2X1.';
+    if (values.province.trim().length < 2) found.province = 'Which region?';
+    if (!POSTAL_RE.test(values.postal.trim())) found.postal = 'Enter your postal or ZIP code.';
     if (!values.ageConfirmed) found.ageConfirmed = 'We need this confirmation to ship.';
 
     setErrors(found);
@@ -216,19 +216,14 @@ export default function Checkout() {
                 </div>
                 <div>
                   <label htmlFor="co-province" className="label">
-                    Province
+                    Region
                   </label>
-                  <select {...field('province')} className={`${field('province').className} appearance-none`}>
-                    {PROVINCES.map((p) => (
-                      <option key={p} value={p}>
-                        {p}
-                      </option>
-                    ))}
-                  </select>
+                  <input type="text" autoComplete="address-level1" placeholder="Region or state" {...field('province')} />
+                  {errorFor('province')}
                 </div>
                 <div>
                   <label htmlFor="co-postal" className="label">
-                    Postal code
+                    Postal / ZIP
                   </label>
                   <input type="text" autoComplete="postal-code" placeholder="M6G 2X1" {...field('postal')} />
                   {errorFor('postal')}
@@ -278,7 +273,7 @@ export default function Checkout() {
                 className="mt-0.5 h-4 w-4 accent-leaf-700"
               />
               <span className="text-sm leading-relaxed text-ink-600">
-                I confirm I am 19 or older and will present government-issued photo ID on delivery.
+                I confirm I am of legal age where I live and will present government-issued photo ID on delivery.
               </span>
             </label>
             {errorFor('ageConfirmed')}

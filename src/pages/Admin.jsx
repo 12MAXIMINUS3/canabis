@@ -51,10 +51,10 @@ const TABS = [
 ];
 
 const shortDate = (iso) =>
-  new Date(iso).toLocaleDateString('en-CA', { day: 'numeric', month: 'short', year: 'numeric' });
+  new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 
 const dateTime = (iso) =>
-  new Date(iso).toLocaleString('en-CA', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
 const STATUS_STYLE = {
   Received: 'border-clay/30 bg-clay/10 text-clay',

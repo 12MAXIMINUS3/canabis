@@ -99,17 +99,17 @@ export default function AgeGate() {
                     Age verification
                   </p>
                   <h2 id="age-gate-title" className="mt-2 text-3xl font-extrabold sm:text-4xl">
-                    You must be 19+ to enter this site.
+                    You must be of legal age to enter this site.
                   </h2>
                   <p id="age-gate-copy" className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-ink-500">
-                    NorthLeaf sells regulated cannabis products. Please confirm you are of legal age in your province or
-                    territory before continuing.
+                    NorthLeaf sells regulated cannabis products. Please confirm you meet the legal age where you live
+                    before continuing.
                   </p>
 
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
                     <button ref={acceptRef} type="button" onClick={accept} className="btn btn-lg btn-primary">
                       <ShieldCheck className="h-4 w-4" />
-                      I am 19+
+                      I am of legal age
                     </button>
                     <button type="button" onClick={decline} className="btn btn-lg btn-secondary">
                       Exit
@@ -127,7 +127,7 @@ export default function AgeGate() {
                     <IdCard className="h-7 w-7" />
                   </span>
                   <h2 id="age-gate-title" className="mt-6 text-3xl font-extrabold">
-                    Come back when you are 19+
+                    Come back when you are of legal age
                   </h2>
                   <p id="age-gate-copy" className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-ink-500">
                     We are not able to show you this store. If you reached this screen by mistake, you can return to the

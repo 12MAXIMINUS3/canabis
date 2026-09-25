@@ -66,7 +66,7 @@ export default function Footer() {
         <div className="shell flex flex-col gap-4 py-6 text-xs text-sand-100/50 sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} NorthLeaf Cannabis. A fictional storefront for demonstration purposes.</p>
           <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span>19+ only</span>
+            <span>Legal age only</span>
             <span aria-hidden="true">·</span>
             <span>Licence #NL-000-DEMO</span>
             <span aria-hidden="true">·</span>

@@ -31,7 +31,7 @@ export default function Deals() {
       Icon: Truck,
       kicker: 'Every order',
       title: `Free shipping over ${formatPrice(PRICING.freeShippingAt)}`,
-      copy: `Flat ${formatPrice(PRICING.flatShipping)} tracked shipping below that, anywhere in Canada. ${
+      copy: `Flat ${formatPrice(PRICING.flatShipping)} tracked shipping below that, wherever you are. ${
         subtotal > 0 && subtotal < PRICING.freeShippingAt
           ? `You are ${formatPrice(PRICING.freeShippingAt - subtotal)} away right now.`
           : ''

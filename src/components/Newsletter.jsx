@@ -107,7 +107,7 @@ export default function Newsletter() {
               </p>
             )}
             <p className="mt-3 text-xs text-mint-100/60">
-              19+ only. Unsubscribe in one click. We never sell your address.
+              Legal age only. Unsubscribe in one click. We never sell your address.
             </p>
           </form>
         </div>

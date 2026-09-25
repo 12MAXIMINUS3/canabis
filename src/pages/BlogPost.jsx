@@ -80,8 +80,8 @@ export default function BlogPost() {
 
           <Reveal className="mt-14 rounded-3xl bg-leaf-50 p-7">
             <p className="text-sm leading-relaxed text-leaf-900">
-              <span className="font-bold">A note on advice.</span> This is general information written for adults in
-              Canada, not medical guidance. If you take prescription medication or are pregnant, talk to a healthcare
+              <span className="font-bold">A note on advice.</span> This is general information written for adults,
+              not medical guidance. If you take prescription medication or are pregnant, talk to a healthcare
               professional before using cannabis.
             </p>
           </Reveal>

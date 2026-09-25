@@ -224,7 +224,7 @@ export default function Account() {
                 </p>
                 <p className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-leaf-700">
                   <Check className="h-3.5 w-3.5" />
-                  Verified 19+
+                  Age verified
                 </p>
               </div>
 

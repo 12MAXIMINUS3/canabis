@@ -104,7 +104,7 @@ const TEAM = [
 const FAQ = [
   {
     q: 'Where do you ship, and how fast?',
-    a: 'Canada-wide by tracked courier. Most urban addresses see delivery in one to two business days; rural and northern routes take three to five. Orders over $99 ship free.',
+    a: 'By tracked courier. Most urban addresses see delivery in one to two business days; rural and remote routes take three to five. Orders over $99 ship free.',
   },
   {
     q: 'What does the package look like?',
@@ -120,7 +120,7 @@ const FAQ = [
   },
   {
     q: 'How is my age verified?',
-    a: 'You confirm 19+ before entering the store, again at checkout, and the courier checks government-issued photo ID at the door. Nobody signs on your behalf.',
+    a: 'You confirm your age before entering the store, again at checkout, and the courier checks government-issued photo ID at the door. Nobody signs on your behalf.',
   },
   {
     q: 'Do you store my payment details?',
@@ -133,7 +133,7 @@ const POLICIES = [
     id: 'shipping',
     Icon: Truck,
     title: 'Shipping & Returns',
-    copy: 'Tracked Canada-wide delivery in 1–3 business days, free over $99. Sealed products are returnable within 14 days; opened cannabis products are handled case by case.',
+    copy: 'Tracked delivery in 1–3 business days, free over $99. Sealed products are returnable within 14 days; opened cannabis products are handled case by case.',
   },
   {
     id: 'privacy',
@@ -145,13 +145,13 @@ const POLICIES = [
     id: 'terms',
     Icon: Scale,
     title: 'Terms of Service',
-    copy: 'Orders are capped at the legal personal possession limit of 30 g dried equivalent. Products are for personal use by adults 19+ and may not be resold or shipped onward.',
+    copy: 'Orders are capped at the legal personal possession limit of 30 g dried equivalent. Products are for personal use by adults of legal age and may not be resold or shipped onward.',
   },
   {
     id: 'age',
     Icon: IdCard,
     title: 'Age Verification',
-    copy: 'A 19+ confirmation is required to browse, a second confirmation at checkout, and government-issued photo ID on delivery. We do not market to anyone under 19.',
+    copy: 'An age confirmation is required to browse, a second confirmation at checkout, and government-issued photo ID on delivery. We never market to minors.',
   },
   {
     id: 'responsible',

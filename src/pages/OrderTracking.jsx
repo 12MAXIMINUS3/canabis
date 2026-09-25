@@ -78,7 +78,7 @@ export default function OrderTracking() {
           steps: stepsFor(o.status),
           total: Number(o.total),
           items: o.items ?? [],
-          placedAt: new Date(o.created_at).toLocaleDateString('en-CA', {
+          placedAt: new Date(o.created_at).toLocaleDateString(undefined, {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
@@ -177,7 +177,7 @@ export default function OrderTracking() {
           <div className="mt-6 space-y-2.5 text-sm text-ink-500">
             {[
               'Tracking updates once the courier scans the parcel, not at packing.',
-              'Someone 19+ must sign. Couriers will not leave cannabis at the door.',
+              'Someone of legal age must sign. Couriers will not leave cannabis at the door.',
               'No movement for four business days? Contact us and we open a trace.',
             ].map((line) => (
               <p key={line} className="flex items-start gap-2.5">

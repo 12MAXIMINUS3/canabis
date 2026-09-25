@@ -29,7 +29,7 @@ export default function Shipping() {
     <div className="space-y-20 sm:space-y-24">
       <PageHero
         eyebrow="Shipping & returns"
-        title="Delivered discreetly, anywhere in Canada"
+        title="Delivered discreetly, wherever you are"
         copy={`Flat ${formatPrice(PRICING.flatShipping)} tracked shipping, free on orders over ${formatPrice(
           PRICING.freeShippingAt,
         )}. Orders paid before 1pm ET leave the same business day.`}

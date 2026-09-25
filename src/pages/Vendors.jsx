@@ -29,7 +29,7 @@ export default function Vendors() {
     if (values.farm.trim().length < 2) found.farm = 'Tell us what the operation is called.';
     if (values.contact.trim().length < 2) found.contact = 'Who should we reply to?';
     if (!EMAIL_RE.test(values.email.trim())) found.email = 'We need a working email address.';
-    if (values.province.trim().length < 2) found.province = 'Which province are you growing in?';
+    if (values.province.trim().length < 2) found.province = 'Which region are you growing in?';
     if (values.notes.trim().length < 20) found.notes = 'A few sentences about the lot, please — 20 characters minimum.';
 
     setErrors(found);
@@ -168,9 +168,9 @@ export default function Vendors() {
                 </div>
                 <div>
                   <label htmlFor="vendor-province" className="label">
-                    Province
+                    Region
                   </label>
-                  <input type="text" placeholder="British Columbia" {...field('province')} />
+                  <input type="text" placeholder="Region or state" {...field('province')} />
                   {errorFor('province')}
                 </div>
               </div>
