@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 
 /**
@@ -37,9 +38,13 @@ export const staggerChild = {
 };
 
 /** <StaggerGrid> + <StaggerItem> — the pattern used by category & product grids. */
-export function StaggerGrid({ children, className, stagger = 0.08, amount = 0.15, ...rest }) {
+export const StaggerGrid = forwardRef(function StaggerGrid(
+  { children, className, stagger = 0.08, amount = 0.15, ...rest },
+  ref,
+) {
   return (
     <motion.div
+      ref={ref}
       variants={staggerParent(stagger)}
       initial="hidden"
       whileInView="show"
@@ -50,7 +55,7 @@ export function StaggerGrid({ children, className, stagger = 0.08, amount = 0.15
       {children}
     </motion.div>
   );
-}
+});
 
 export function StaggerItem({ children, className, ...rest }) {
   return (

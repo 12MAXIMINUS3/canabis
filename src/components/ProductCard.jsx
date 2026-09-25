@@ -63,7 +63,7 @@ export default function ProductCard({ product, detailed = false, className = '' 
         )}
 
         <h3 className="font-display text-base font-bold leading-snug">
-          <Link to={`/product/${product.id}`} className="transition-colors hover:text-leaf-700">
+          <Link to={`/product/${product.id}`} className="-my-1 inline-block py-1 transition-colors hover:text-leaf-700">
             {product.name}
           </Link>
         </h3>

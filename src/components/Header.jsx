@@ -67,7 +67,7 @@ export default function Header() {
     >
       {/* Promo bar */}
       <div className="bg-leaf-800 text-white">
-        <div className="shell flex h-9 items-center justify-center gap-2 text-[11px] font-semibold sm:text-xs">
+        <div className="shell flex h-10 items-center justify-center gap-2 text-xs font-semibold sm:text-[13px]">
           <Tag className="h-3.5 w-3.5 text-mint-300" />
           <span className="truncate">
             Any {MIX_MATCH.minItems} for {MIX_MATCH.percentOff}% off · Free discreet shipping over $99

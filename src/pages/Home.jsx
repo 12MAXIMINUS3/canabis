@@ -15,7 +15,7 @@ import {
 import { EASE, Reveal, StaggerGrid, StaggerItem } from '../components/Motion';
 import SectionHeading from '../components/SectionHeading';
 import CategoryCard from '../components/CategoryCard';
-import ProductCard from '../components/ProductCard';
+import ProductRail from '../components/ProductRail';
 import Newsletter from '../components/Newsletter';
 import HeroBackdrop from '../components/HeroBackdrop';
 import { useCatalog } from '../context/CatalogContext';
@@ -302,16 +302,9 @@ export default function Home() {
             />
           </div>
 
-          <StaggerGrid
-            className="no-scrollbar mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-4 sm:px-6 lg:mx-auto lg:grid lg:max-w-7xl lg:grid-cols-3 lg:overflow-visible lg:px-8 xl:grid-cols-3"
-            stagger={0.07}
-          >
-            {bestSellers.map((product) => (
-              <StaggerItem key={product.id} className="w-[76vw] shrink-0 snap-start sm:w-[45vw] lg:w-auto">
-                <ProductCard product={product} className="h-full" />
-              </StaggerItem>
-            ))}
-          </StaggerGrid>
+          <div className="mt-10">
+            <ProductRail products={bestSellers} />
+          </div>
         </section>
 
         <Compliance />

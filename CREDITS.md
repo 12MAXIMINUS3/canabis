@@ -15,14 +15,14 @@ Each source photo can be viewed at `https://www.pexels.com/photo/<id>/`.
 | --- | --- |
 | aurora-haze.jpg | 3047447 |
 | midnight-orchard.jpg | 6462279 |
-| pacific-fog.jpg | 7667737 |
+| pacific-fog.jpg | 30682041 |
 | sunrise-gummies.jpg | 1236662 |
 | cocoa-noir-squares.jpg | 4113364 |
 | stillwater-tea.jpg | 32908162 |
 | northline-cart.jpg | 9419514 |
 | driftwood-aio.jpg | 11587603 |
 | glacier-live-rosin.jpg | 8139076 |
-| pressed-hash-block.jpg | 9550954 |
+| pressed-hash-block.jpg | 33930125 |
 | clearfield-cbd-oil.jpg | 7852732 |
 | trailhead-balm.jpg | 7038197 |
 | brass-grinder.jpg | 11652817 |
