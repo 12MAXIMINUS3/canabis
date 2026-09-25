@@ -17,7 +17,7 @@ import SectionHeading from '../components/SectionHeading';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
 import Newsletter from '../components/Newsletter';
-import HeroSlideshow from '../components/HeroSlideshow';
+import HeroBackdrop from '../components/HeroBackdrop';
 import { useCatalog } from '../context/CatalogContext';
 
 /* ------------------------------------------------------------------ */
@@ -38,7 +38,7 @@ function Hero() {
 
   return (
     <section className="relative isolate overflow-hidden">
-      <HeroSlideshow />
+      <HeroBackdrop />
 
       <div className="shell relative grid gap-14 pb-20 pt-16 sm:pt-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10 lg:pb-28">
         <motion.div variants={container} initial="hidden" animate="show">
