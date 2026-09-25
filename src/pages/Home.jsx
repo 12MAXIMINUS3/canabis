@@ -17,40 +17,13 @@ import SectionHeading from '../components/SectionHeading';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
 import Newsletter from '../components/Newsletter';
+import HeroSlideshow from '../components/HeroSlideshow';
 import { useCatalog } from '../context/CatalogContext';
 
 /* ------------------------------------------------------------------ */
 /* Hero                                                                */
 /* ------------------------------------------------------------------ */
 
-/** Abstract leaf-and-gradient backdrop. Pure CSS + inline SVG, nothing licensed. */
-function HeroBackdrop() {
-  return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-leaf-50 via-sand-50 to-sand-50" />
-      <div className="absolute -left-32 -top-40 h-[30rem] w-[30rem] rounded-full bg-mint-300/30 blur-3xl animate-drift-slow" />
-      <div className="absolute -right-24 top-10 h-[26rem] w-[26rem] rounded-full bg-leaf-200/40 blur-3xl animate-drift" />
-      <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-sand-300/30 blur-3xl" />
-
-      {/* Repeating leaf outline, faded out toward the bottom */}
-      <svg className="absolute inset-0 h-full w-full" style={{ maskImage: 'linear-gradient(to bottom, black, transparent 78%)', WebkitMaskImage: 'linear-gradient(to bottom, black, transparent 78%)' }}>
-        <defs>
-          <pattern id="leaf-tile" width="128" height="128" patternUnits="userSpaceOnUse" patternTransform="rotate(12)">
-            <path
-              d="M24 104c0-42 29-73 84-78 5 55-33 84-68 84H24Z"
-              fill="none"
-              stroke="#0f6251"
-              strokeOpacity="0.09"
-              strokeWidth="1.5"
-            />
-            <path d="M24 104c21-24 45-39 74-50" fill="none" stroke="#0f6251" strokeOpacity="0.07" strokeWidth="1.5" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#leaf-tile)" />
-      </svg>
-    </div>
-  );
-}
 
 const HERO_STATS = [
   { value: '100%', label: 'Batch lab-tested' },
@@ -65,7 +38,7 @@ function Hero() {
 
   return (
     <section className="relative isolate overflow-hidden">
-      <HeroBackdrop />
+      <HeroSlideshow />
 
       <div className="shell relative grid gap-14 pb-20 pt-16 sm:pt-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-10 lg:pb-28">
         <motion.div variants={container} initial="hidden" animate="show">
