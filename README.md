@@ -185,3 +185,39 @@ account — 10/10 isolation checks passed.
 2. Create the Supabase auth user (Dashboard → Authentication → Add user).
 
 To revoke, delete the row from `admin_users`. The account can still sign in but sees nothing.
+
+### Managing products
+
+The Products tab lists every product with its photo, price, potency and stock.
+**Add product** opens a form; **Edit** opens the same form filled in.
+
+The form covers everything the storefront shows — name, category, format, price,
+pack size, THC/CBD with their filter tiers, blurb, description, effects, terpenes,
+usage, badge, image path and stock — with a live preview of the resulting card.
+
+Two details worth knowing:
+
+- **The web address is the id.** It is generated from the name for a new product,
+  checked for collisions before saving, then frozen once the product exists —
+  changing it later would break `/product/<id>` for anyone who bookmarked it.
+- **Saving refreshes the storefront catalogue**, so a price change is visible on
+  the shop without a redeploy. Products live in Postgres, not in the bundle.
+
+Validation runs in the form *and* is enforced by the database, so a bad value
+cannot get through by tampering with the page.
+
+### Demo data
+
+The dashboard is more legible with something in it:
+
+```bash
+SUPABASE_PAT=sbp_... SUPABASE_PROJECT_REF=xxxx node scripts/seed-demo-data.mjs
+```
+
+That writes 26 orders across every status, plus contact messages, subscribers and
+vendor applications, dated over the last few weeks. Every row uses an
+`@demo.northleaf` email so it can all be removed again:
+
+```bash
+SUPABASE_PAT=... SUPABASE_PROJECT_REF=... node scripts/seed-demo-data.mjs --clear
+```

@@ -28,6 +28,8 @@ export function CatalogProvider({ children }) {
   const [products, setProducts] = useState(fallbackProducts);
   const [categories, setCategories] = useState(fallbackCategories);
   const [status, setStatus] = useState(isConfigured ? 'loading' : 'local');
+  // Bumped after an admin saves, to pull the catalogue again.
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     if (!isConfigured) return undefined;
@@ -66,7 +68,7 @@ export function CatalogProvider({ children }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   const value = useMemo(() => {
     const byId = Object.fromEntries(products.map((p) => [p.id, p]));
@@ -77,6 +79,7 @@ export function CatalogProvider({ children }) {
       isLive: status === 'supabase',
       loading: status === 'loading',
       categoryBySlug: Object.fromEntries(categories.map((c) => [c.slug, c])),
+      refresh: () => setReloadKey((k) => k + 1),
       getProduct: (id) => byId[id],
       bestSellers: BEST_SELLER_IDS.map((id) => byId[id]).filter(Boolean),
       relatedTo: (product, limit = 3) =>

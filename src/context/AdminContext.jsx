@@ -128,3 +128,61 @@ export const updateProduct = (id, patch) =>
   guard((db) => db.from('products').update(patch).eq('id', id));
 
 export const ORDER_STATUSES = ['Received', 'Packed', 'Shipped', 'In transit', 'Delivered', 'Refunded'];
+
+/* ---------------- product management ---------------- */
+
+/** camelCase form values -> the snake_case columns the table uses. */
+export function productToRow(v) {
+  const num = (x, fallback = 0) => (x === '' || x === null || Number.isNaN(Number(x)) ? fallback : Number(x));
+  const list = (x) =>
+    Array.isArray(x) ? x : String(x || '').split(',').map((s) => s.trim()).filter(Boolean);
+
+  return {
+    id: v.id,
+    name: v.name.trim(),
+    category: v.category,
+    type: v.type.trim(),
+    price: num(v.price),
+    size: v.size.trim(),
+    thc: num(v.thc),
+    cbd: num(v.cbd),
+    unit: v.unit,
+    thc_tier: v.thcTier,
+    cbd_tier: v.cbdTier,
+    rating: num(v.rating, 0),
+    review_count: num(v.reviewCount, 0),
+    in_stock: Boolean(v.inStock),
+    badge: v.badge?.trim() || null,
+    blurb: v.blurb.trim(),
+    description: v.description.trim(),
+    effects: list(v.effects),
+    usage: v.usage?.trim() || null,
+    terpenes: list(v.terpenes),
+    image_url: v.imageUrl?.trim() || null,
+    sort_order: num(v.sortOrder, 999),
+  };
+}
+
+export const createProduct = (values) =>
+  guard((db) => db.from('products').insert(productToRow(values)).select('id').single());
+
+export const saveProduct = (id, values) =>
+  guard((db) => db.from('products').update(productToRow(values)).eq('id', id).select('id').single());
+
+export const deleteProduct = (id) => guard((db) => db.from('products').delete().eq('id', id));
+
+/** Is this id free? Ids are the product's URL, so they have to be unique. */
+export const idIsFree = async (id) => {
+  const { data } = await guard((db) => db.from('products').select('id').eq('id', id).maybeSingle());
+  return !data;
+};
+
+/** "Aurora Haze" -> "aurora-haze" */
+export const slugify = (name) =>
+  name
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 48);

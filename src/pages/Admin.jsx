@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
+  Plus,
   Cart,
   Check,
   ChevronDown,
@@ -18,6 +19,8 @@ import {
 import { EASE } from '../components/Motion';
 import { formatPrice } from '../context/CartContext';
 import { useCatalog } from '../context/CatalogContext';
+import ProductForm from '../components/ProductForm';
+import Thumb from '../components/Thumb';
 import {
   ORDER_STATUSES,
   fetchApplications,
@@ -211,7 +214,8 @@ function Table({ headers, children }) {
 
 function Dashboard() {
   const { user, signOut } = useAdmin();
-  const { products } = useCatalog();
+  const { products, refresh } = useCatalog();
+  const [editing, setEditing] = useState(null); // product being edited, or "new"
   const { push } = useToast();
 
   const [tab, setTab] = useState('overview');
@@ -484,34 +488,58 @@ function Dashboard() {
 
           {/* Products */}
           {!loading && tab === 'products' && (
-            <Table headers={['Product', 'Category', 'Price', 'Potency', 'Stock']}>
-              {products.map((p) => (
-                <tr key={p.id} className="hover:bg-sand-50">
-                  <td className="px-4 py-3">
-                    <Link to={`/product/${p.id}`} className="font-semibold hover:text-leaf-700">
-                      {p.name}
-                    </Link>
-                    <p className="text-xs text-ink-400">{p.size}</p>
-                  </td>
-                  <td className="px-4 py-3 text-ink-500">{p.category}</td>
-                  <td className="px-4 py-3 font-semibold tabular-nums">{formatPrice(p.price)}</td>
-                  <td className="px-4 py-3 text-ink-500 tabular-nums">
-                    {p.thc}
-                    {p.unit} THC
-                  </td>
-                  <td className="px-4 py-3">
-                    <button
-                      type="button"
-                      onClick={() => toggleStock(p)}
-                      className={`chip ${p.inStock ? 'border-leaf-700 bg-leaf-700 text-white' : 'border-clay/30 bg-clay/10 text-clay'}`}
-                    >
-                      {p.inStock ? <Check className="h-3.5 w-3.5" /> : null}
-                      {p.inStock ? 'In stock' : 'Out of stock'}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </Table>
+            <>
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-ink-500">
+                  <span className="font-semibold text-ink-800">{products.length}</span> products ·{' '}
+                  <span className="font-semibold text-ink-800">{products.filter((p) => !p.inStock).length}</span> out
+                  of stock
+                </p>
+                <button type="button" onClick={() => setEditing('new')} className="btn btn-md btn-primary">
+                  <Plus className="h-4 w-4" />
+                  Add product
+                </button>
+              </div>
+
+              <Table headers={['Product', 'Category', 'Price', 'Potency', 'Stock', '']}>
+                {products.map((p) => (
+                  <tr key={p.id} className="hover:bg-sand-50">
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <Thumb product={p} category={p.category} className="h-10 w-10 shrink-0 rounded-lg" glyphClass="h-3.5 w-3.5" />
+                        <div className="min-w-0">
+                          <Link to={`/product/${p.id}`} className="font-semibold hover:text-leaf-700">
+                            {p.name}
+                          </Link>
+                          <p className="text-xs text-ink-400">{p.size}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-ink-500">{p.category}</td>
+                    <td className="px-4 py-3 font-semibold tabular-nums">{formatPrice(p.price)}</td>
+                    <td className="whitespace-nowrap px-4 py-3 text-ink-500 tabular-nums">
+                      {p.thc}
+                      {p.unit} THC
+                    </td>
+                    <td className="px-4 py-3">
+                      <button
+                        type="button"
+                        onClick={() => toggleStock(p)}
+                        className={`chip ${p.inStock ? 'border-leaf-700 bg-leaf-700 text-white' : 'border-clay/30 bg-clay/10 text-clay'}`}
+                      >
+                        {p.inStock ? <Check className="h-3.5 w-3.5" /> : null}
+                        {p.inStock ? 'In stock' : 'Out of stock'}
+                      </button>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <button type="button" onClick={() => setEditing(p)} className="btn btn-md btn-secondary px-3 py-1.5 text-xs">
+                        Edit
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </Table>
+            </>
           )}
 
           {/* Messages */}
@@ -584,6 +612,25 @@ function Dashboard() {
             ))}
         </motion.div>
       </AnimatePresence>
+
+      {editing && (
+        <ProductForm
+          product={editing === 'new' ? null : editing}
+          onClose={() => setEditing(null)}
+          onSaved={(values, wasNew) => {
+            setEditing(null);
+            refresh(); // pull the catalogue again so the shop and this table agree
+            load();
+            push(wasNew ? 'Product added' : 'Product saved', { detail: `${values.name} is live on the shop.` });
+          }}
+          onDeleted={(p) => {
+            setEditing(null);
+            refresh();
+            load();
+            push('Product deleted', { tone: 'info', detail: `${p.name} has been removed from the shop.` });
+          }}
+        />
+      )}
     </div>
   );
 }
