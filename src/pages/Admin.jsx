@@ -323,7 +323,18 @@ function Dashboard() {
             <p className="text-sm text-sand-100/60">{user?.email}</p>
           </div>
         </div>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setTab('products');
+              setEditing('new');
+            }}
+            className="btn btn-md bg-mint-400 text-leaf-900 hover:bg-mint-300"
+          >
+            <Plus className="h-4 w-4" />
+            Add product
+          </button>
           <button type="button" onClick={load} className="btn btn-md border border-white/20 text-white hover:bg-white/10">
             Refresh
           </button>
