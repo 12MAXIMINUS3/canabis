@@ -221,3 +221,29 @@ vendor applications, dated over the last few weeks. Every row uses an
 ```bash
 SUPABASE_PAT=... SUPABASE_PROJECT_REF=... node scripts/seed-demo-data.mjs --clear
 ```
+
+## Deploying to Vercel
+
+Two things are needed beyond pushing the repo.
+
+**1. SPA routing.** React Router handles `/admin`, `/shop` and the rest in the
+browser, but a direct request for those paths reaches Vercel's server first, which
+looks for a matching file and returns 404. `vercel.json` rewrites every path to
+`index.html` so the router can take over. Static files still win: Vercel checks
+the filesystem before applying a rewrite, so `/assets/*` and `/images/*` are
+served normally.
+
+**2. Environment variables.** `.env.local` is gitignored, so Vercel does not get
+the Supabase settings from the repo. Add them in
+**Project → Settings → Environment Variables**, for Production, Preview and
+Development:
+
+| Name | Value |
+| --- | --- |
+| `VITE_SUPABASE_URL` | `https://<your-project-ref>.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | your project's anon key |
+
+Vite inlines `VITE_*` variables **at build time**, so adding them is not enough on
+its own — redeploy afterwards. Without them the site still runs, but it serves the
+bundled sample catalogue and staff sign-in is disabled, because the app has no
+database to talk to.
