@@ -84,7 +84,7 @@ export default function Header() {
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-leaf-700 shadow-soft transition-transform duration-300 group-hover:-rotate-6">
             <LogoMark className="h-5 w-5" />
           </span>
-          <span className="font-display text-lg font-extrabold tracking-tight text-ink-900 sm:text-xl">
+          <span className="font-display text-lg font-extrabold tracking-tight text-ink-900 sm:text-xl xl:hidden 2xl:inline">
             Canabis<span className="text-leaf-600">Leaf</span>Hub
           </span>
         </Link>
@@ -100,7 +100,7 @@ export default function Header() {
               return (
                 <li
                   key={item.label}
-                  className={`relative ${item.secondary ? 'nav-secondary' : ''}`}
+                  className="relative"
                   onMouseEnter={() => hasMenu && openMenu(i)}
                   onMouseLeave={scheduleClose}
                 >
@@ -110,7 +110,7 @@ export default function Header() {
                     onFocus={() => hasMenu && openMenu(i)}
                     aria-expanded={hasMenu ? isOpen : undefined}
                     className={({ isActive }) =>
-                      `flex items-center gap-1 whitespace-nowrap px-2 py-2 text-[12px] font-bold uppercase tracking-tight transition-colors 2xl:px-3 2xl:text-[13px] 2xl:tracking-wide ${
+                      `flex items-center gap-0.5 whitespace-nowrap px-1.5 py-2 text-[11.5px] font-bold uppercase tracking-tight transition-colors 2xl:gap-1 2xl:px-2.5 2xl:text-xs ${
                         isActive || isOpen ? 'text-leaf-800' : 'text-ink-600 hover:text-ink-900'
                       }`
                     }
@@ -118,7 +118,9 @@ export default function Header() {
                     {item.label}
                     {hasMenu && (
                       <ChevronDown
-                        className={`h-3.5 w-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                        className={`h-3 w-3 shrink-0 opacity-70 transition-transform duration-200 ${
+                          isOpen ? 'rotate-180' : ''
+                        }`}
                       />
                     )}
                   </NavLink>
@@ -189,7 +191,7 @@ export default function Header() {
 
           <button type="button" onClick={openCart} className="btn btn-md btn-secondary" aria-label={`Open cart, ${count} items`}>
             <Cart className="h-4 w-4" />
-            <span className="hidden sm:inline">Cart</span>
+            <span className="hidden sm:inline xl:hidden 2xl:inline">Cart</span>
             <span className="tabular-nums">({count})</span>
           </button>
 

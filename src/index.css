@@ -85,21 +85,6 @@
   }
 }
 
-@layer components {
-  /* Header overflow control.
-     Eleven top-level nav items plus the wordmark need roughly 1600px before
-     they stop crowding each other. Below that the six category links fold away
-     — they are duplicated inside the Shop mega-menu, so nothing is lost. */
-  .nav-secondary {
-    display: none;
-  }
-  @media (min-width: 1600px) {
-    .nav-secondary {
-      display: block;
-    }
-  }
-}
-
 @layer utilities {
   /* Horizontal product rail on the home page */
   .no-scrollbar {
