@@ -277,3 +277,21 @@ home screen and the header can never drift apart:
 
 To regenerate after a design change, re-render the same SVG at each size rather
 than resizing a PNG — the small sizes use a tighter crop on purpose.
+
+### Working through orders
+
+The Orders tab searches across order number, customer name, email and city, and
+the status chips carry their own counts so you can see at a glance what is
+waiting to be packed. The line under them shows how many orders match and what
+they add up to.
+
+Expanding an order shows its line items and offers two things:
+
+- **Packing slip** — opens a printable slip in its own window. It carries the
+  order number, the destination and what to pick, and **no prices**: the slip
+  goes in the box, the customer has already paid, and a value printed on the
+  outside of a parcel is an invitation.
+- **Email customer** — opens a reply with the order number already in the subject.
+
+Status is changed from the dropdown on each row and writes straight to the
+database, so order tracking reflects it immediately.

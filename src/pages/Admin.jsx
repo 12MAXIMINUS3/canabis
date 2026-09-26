@@ -62,6 +62,83 @@ const shortDate = (iso) =>
 const dateTime = (iso) =>
   new Date(iso).toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
 
+/** Escapes text going into the printed slip, since it comes from customer input. */
+const esc = (v) =>
+  String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+/**
+ * Opens a printable packing slip in its own window.
+ *
+ * Deliberately plain: no prices, because the slip goes in the box and the
+ * customer has already paid, and a value on the outside of a parcel is an
+ * invitation. Just what to pick, where it goes, and the order number.
+ */
+function printSlip(order, items) {
+  const win = window.open('', '_blank', 'width=760,height=900');
+  if (!win) return; // pop-up blocked
+
+  const rows = items.length
+    ? items
+        .map(
+          (i) =>
+            `<tr><td>${esc(i.name)}</td><td class="muted">${esc(i.size ?? '')}</td><td class="qty">${esc(i.quantity)}</td></tr>`,
+        )
+        .join('')
+    : '<tr><td colspan="3" class="muted">No line items recorded.</td></tr>';
+
+  win.document.write(`<!doctype html><html><head><meta charset="utf-8">
+<title>Packing slip ${esc(order.order_number)}</title>
+<style>
+  *{box-sizing:border-box}
+  body{font:14px/1.5 -apple-system,Segoe UI,Roboto,sans-serif;color:#1c2422;margin:0;padding:40px;max-width:680px}
+  h1{font-size:22px;margin:0 0 2px}
+  .brand{color:#0f6251;font-weight:800;letter-spacing:-.02em}
+  .muted{color:#6b7671}
+  .row{display:flex;justify-content:space-between;gap:24px;margin-top:28px}
+  .box{border:1px solid #e4e0d8;border-radius:10px;padding:14px 16px;flex:1}
+  .label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#8a938f;margin-bottom:6px}
+  table{width:100%;border-collapse:collapse;margin-top:26px}
+  th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:#8a938f;
+     border-bottom:1px solid #e4e0d8;padding:0 0 8px}
+  td{padding:10px 0;border-bottom:1px solid #f1eee8;vertical-align:top}
+  .qty{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;width:60px}
+  th.qty{text-align:right}
+  footer{margin-top:34px;padding-top:14px;border-top:1px solid #e4e0d8;font-size:11px;color:#8a938f}
+  @media print{body{padding:0}@page{margin:16mm}}
+</style></head><body>
+  <h1><span class="brand">CanabisLeafHub</span></h1>
+  <p class="muted">Packing slip · ${esc(order.order_number)}</p>
+
+  <div class="row">
+    <div class="box">
+      <div class="label">Deliver to</div>
+      <strong>${esc(order.full_name)}</strong><br>
+      ${esc(order.city)}, ${esc(order.province)}<br>
+      <span class="muted">${esc(order.email)}</span>
+    </div>
+    <div class="box">
+      <div class="label">Order</div>
+      <strong>${esc(order.order_number)}</strong><br>
+      ${esc(new Date(order.created_at).toLocaleDateString())}<br>
+      <span class="muted">Status: ${esc(order.status)}</span>
+    </div>
+  </div>
+
+  <table>
+    <thead><tr><th>Item</th><th>Size</th><th class="qty">Qty</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+
+  <footer>
+    Plain packaging, odour sealed. Government-issued photo ID must be checked on delivery.<br>
+    No prices are shown on this slip by design.
+  </footer>
+</body></html>`);
+  win.document.close();
+  win.focus();
+  win.print();
+}
+
 const STATUS_STYLE = {
   Received: 'border-clay/30 bg-clay/10 text-clay',
   Packed: 'border-leaf-700/20 bg-leaf-50 text-leaf-700',
@@ -229,6 +306,8 @@ function Dashboard() {
   const [subscribers, setSubscribers] = useState([]);
   const [applications, setApplications] = useState([]);
   const [expanded, setExpanded] = useState(null);
+  const [orderQuery, setOrderQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [items, setItems] = useState({});
   const [loading, setLoading] = useState(true);
 
@@ -299,6 +378,22 @@ function Dashboard() {
   };
 
   const revenue = Number(stats?.revenue_total ?? 0);
+
+  // Orders matching the search box and the status chips.
+  const visibleOrders = useMemo(() => {
+    const q = orderQuery.trim().toLowerCase();
+    return orders.filter((o) => {
+      if (statusFilter !== 'all' && o.status !== statusFilter) return false;
+      if (!q) return true;
+      return `${o.order_number} ${o.full_name} ${o.email} ${o.city} ${o.province}`.toLowerCase().includes(q);
+    });
+  }, [orders, orderQuery, statusFilter]);
+
+  // How many orders sit at each status, for the chip labels.
+  const statusCounts = useMemo(
+    () => orders.reduce((acc, o) => ({ ...acc, [o.status]: (acc[o.status] ?? 0) + 1 }), {}),
+    [orders],
+  );
 
   const counts = useMemo(
     () => ({
@@ -439,12 +534,68 @@ function Dashboard() {
           )}
 
           {/* Orders */}
-          {!loading && tab === 'orders' &&
-            (orders.length === 0 ? (
-              <Empty>No orders yet.</Empty>
-            ) : (
+          {!loading && tab === 'orders' && (
+            <>
+              {/* Find an order, or narrow to the ones that need work */}
+              <div className="mb-5 flex flex-col gap-4">
+                <div className="relative max-w-md">
+                  <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-400" />
+                  <input
+                    type="search"
+                    value={orderQuery}
+                    onChange={(e) => setOrderQuery(e.target.value)}
+                    placeholder="Search by order number, name, email or city…"
+                    aria-label="Search orders"
+                    className="field pl-11"
+                  />
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setStatusFilter('all')}
+                    aria-pressed={statusFilter === 'all'}
+                    className={`chip ${statusFilter === 'all' ? 'chip-active' : 'hover:border-leaf-400'}`}
+                  >
+                    All <span className="tabular-nums opacity-70">{orders.length}</span>
+                  </button>
+                  {ORDER_STATUSES.filter((st) => statusCounts[st]).map((st) => (
+                    <button
+                      key={st}
+                      type="button"
+                      onClick={() => setStatusFilter(st)}
+                      aria-pressed={statusFilter === st}
+                      className={`chip ${statusFilter === st ? 'chip-active' : 'hover:border-leaf-400'}`}
+                    >
+                      {st} <span className="tabular-nums opacity-70">{statusCounts[st]}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <p className="text-sm text-ink-500">
+                  Showing <span className="font-semibold text-ink-800">{visibleOrders.length}</span> of{' '}
+                  <span className="font-semibold text-ink-800">{orders.length}</span> orders
+                  {visibleOrders.length > 0 && (
+                    <>
+                      {' · '}
+                      <span className="font-semibold text-ink-800">
+                        {formatPrice(visibleOrders.reduce((sum, o) => sum + Number(o.total), 0))}
+                      </span>{' '}
+                      total
+                    </>
+                  )}
+                </p>
+              </div>
+
+              {orders.length === 0 ? (
+                <Empty>No orders yet. Place one through the storefront checkout and it will appear here.</Empty>
+              ) : visibleOrders.length === 0 ? (
+                <Empty>
+                  Nothing matches that search. Try an order number like NL-48400, or clear the status filter.
+                </Empty>
+              ) : (
               <Table headers={['', 'Order', 'Customer', 'Destination', 'Placed', 'Total', 'Status']}>
-                {orders.map((o) => (
+                {visibleOrders.map((o) => (
                   <>
                     <tr key={o.id} className="hover:bg-sand-50">
                       <td className="px-3 py-3">
@@ -505,13 +656,31 @@ function Dashboard() {
                             {!items[o.id]?.length && <li className="text-sm text-ink-400">Loading…</li>}
                           </ul>
                           <p className="mt-3 text-xs text-ink-400">Paid by {o.payment_method}</p>
+                          <div className="mt-3 flex flex-wrap gap-2">
+                            <button
+                              type="button"
+                              onClick={() => printSlip(o, items[o.id] ?? [])}
+                              className="btn btn-md btn-secondary px-3 py-1.5 text-xs"
+                            >
+                              <Package className="h-3.5 w-3.5" />
+                              Packing slip
+                            </button>
+                            <a
+                              href={`mailto:${o.email}?subject=${encodeURIComponent('Your order ' + o.order_number)}`}
+                              className="btn btn-md btn-ghost px-3 py-1.5 text-xs"
+                            >
+                              Email customer
+                            </a>
+                          </div>
                         </td>
                       </tr>
                     )}
                   </>
                 ))}
               </Table>
-            ))}
+              )}
+            </>
+          )}
 
           {/* Products */}
           {!loading && tab === 'products' && (
