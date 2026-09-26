@@ -223,7 +223,7 @@ function Compliance() {
           <p className="eyebrow">Trust &amp; compliance</p>
           <h2 className="mt-3 text-3xl font-extrabold sm:text-4xl">Regulated, tested and honest about it</h2>
           <p className="mt-4 text-base leading-relaxed text-ink-500">
-            NorthLeaf is a fictional storefront, but it is modelled on how a licensed retailer actually has to operate:
+            CanabisLeafHub is a fictional storefront, but it is modelled on how a licensed retailer actually has to operate:
             verified age, sealed products, published lab results and no marketing aimed at anyone under 19.
           </p>
           <Link to="/about" className="btn btn-md btn-secondary mt-7">

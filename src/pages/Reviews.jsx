@@ -138,7 +138,7 @@ export default function Reviews() {
                   </div>
                   <p className="mt-3 flex items-center gap-1.5 text-[11px] font-semibold text-leaf-700">
                     <Check className="h-3.5 w-3.5" />
-                    Verified purchase · {review.product ?? getProduct(review.productId)?.name ?? 'NorthLeaf'}
+                    Verified purchase · {review.product ?? getProduct(review.productId)?.name ?? 'CanabisLeafHub'}
                   </p>
                 </footer>
               </article>

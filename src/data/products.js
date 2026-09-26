@@ -1,5 +1,5 @@
 /**
- * Mock catalogue for NorthLeaf Cannabis.
+ * Mock catalogue for CanabisLeafHub.
  * All brands, strains, copy and reviews here are invented for this demo.
  *
  * Potency notes:

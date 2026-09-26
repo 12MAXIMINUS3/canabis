@@ -15,7 +15,7 @@ const DETAILS = [
   {
     Icon: Mail,
     title: 'Email',
-    lines: ['support@northleaf.example', 'Replies within one business day'],
+    lines: ['support@canabisleafhub.example', 'Replies within one business day'],
   },
   {
     Icon: Clock,

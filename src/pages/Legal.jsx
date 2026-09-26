@@ -53,7 +53,7 @@ export default function Legal({ doc }) {
             <Link to="/contact" className="font-semibold text-leaf-700 hover:underline">
               Contact us
             </Link>
-            . NorthLeaf is a fictional storefront; this text is illustrative, not legal advice.
+            . CanabisLeafHub is a fictional storefront; this text is illustrative, not legal advice.
           </p>
         </article>
       </div>

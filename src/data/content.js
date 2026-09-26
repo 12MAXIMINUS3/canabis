@@ -499,7 +499,7 @@ export const legalDocs = {
       },
       {
         heading: 'Your rights',
-        text: 'You can request a copy of your data, correct it, or ask us to delete it at any time by emailing privacy@northleaf.example. We reply within 30 days, usually much sooner.',
+        text: 'You can request a copy of your data, correct it, or ask us to delete it at any time by emailing privacy@canabisleafhub.example. We reply within 30 days, usually much sooner.',
       },
     ],
   },

@@ -215,7 +215,7 @@ export default function About() {
             Our story
           </p>
           <h1 className="mt-4 text-4xl font-extrabold leading-tight sm:text-5xl">
-            We started NorthLeaf because good cannabis was being sold badly
+            We started CanabisLeafHub because good cannabis was being sold badly
           </h1>
           <p className="mt-5 text-base leading-relaxed text-ink-500">
             The legal market solved safety and mostly ignored taste, honesty and dignity. Products arrived dry, labels

@@ -53,7 +53,7 @@ export default function Deals() {
     <>
       <PageHero
         compact
-        eyebrow="NorthLeaf deals"
+        eyebrow="CanabisLeafHub deals"
         title="Every offer we run, on one page"
         copy="We do not do fake countdowns or struck-through prices. These three run permanently, and the drops below are simply what is fresh."
       />

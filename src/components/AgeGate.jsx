@@ -103,7 +103,7 @@ export default function AgeGate() {
                     You must be of legal age to enter this site.
                   </h2>
                   <p id="age-gate-copy" className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-ink-500">
-                    NorthLeaf sells regulated cannabis products. Please confirm you meet the legal age where you live
+                    CanabisLeafHub sells regulated cannabis products. Please confirm you meet the legal age where you live
                     before continuing.
                   </p>
 

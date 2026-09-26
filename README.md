@@ -1,4 +1,4 @@
-# NorthLeaf Cannabis — storefront demo
+# CanabisLeafHub — storefront demo
 
 A responsive, animated e-commerce landing page for a **fictional** Canadian cannabis dispensary.
 React + Vite + Tailwind CSS + Framer Motion + React Router. Mock data only, no backend.

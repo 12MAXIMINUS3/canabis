@@ -68,7 +68,7 @@ export default function Header() {
     >
       {/* Promo bar */}
       <div className="bg-leaf-800 text-white">
-        <div className="shell flex h-10 items-center justify-center gap-2 text-xs font-semibold sm:text-[13px]">
+        <div className="mx-auto flex h-10 w-full max-w-[110rem] items-center justify-center gap-2 px-4 text-xs font-semibold sm:px-6 sm:text-[13px] lg:px-8">
           <Tag className="h-3.5 w-3.5 text-mint-300" />
           <span className="truncate">
             Any {MIX_MATCH.minItems} for {MIX_MATCH.percentOff}% off · Free discreet shipping over $99
@@ -79,13 +79,13 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="shell flex h-16 items-center justify-between gap-4 sm:h-[4.5rem]">
-        <Link to="/" className="group flex shrink-0 items-center gap-2.5" aria-label="NorthLeaf Cannabis — home">
+      <div className="mx-auto flex h-16 w-full max-w-[110rem] items-center justify-between gap-3 px-4 sm:h-[4.5rem] sm:px-6 lg:px-8">
+        <Link to="/" className="group flex shrink-0 items-center gap-2.5" aria-label="CanabisLeafHub — home">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-leaf-700 shadow-soft transition-transform duration-300 group-hover:-rotate-6">
             <LogoMark className="h-5 w-5" />
           </span>
-          <span className="font-display text-xl font-extrabold tracking-tight text-ink-900">
-            North<span className="text-leaf-600">Leaf</span>
+          <span className="font-display text-lg font-extrabold tracking-tight text-ink-900 sm:text-xl">
+            Canabis<span className="text-leaf-600">Leaf</span>Hub
           </span>
         </Link>
 
@@ -100,7 +100,7 @@ export default function Header() {
               return (
                 <li
                   key={item.label}
-                  className="relative"
+                  className={`relative ${item.secondary ? 'nav-secondary' : ''}`}
                   onMouseEnter={() => hasMenu && openMenu(i)}
                   onMouseLeave={scheduleClose}
                 >
@@ -110,7 +110,7 @@ export default function Header() {
                     onFocus={() => hasMenu && openMenu(i)}
                     aria-expanded={hasMenu ? isOpen : undefined}
                     className={({ isActive }) =>
-                      `flex items-center gap-1 whitespace-nowrap px-3 py-2 text-[13px] font-bold uppercase tracking-wide transition-colors ${
+                      `flex items-center gap-1 whitespace-nowrap px-2 py-2 text-[12px] font-bold uppercase tracking-tight transition-colors 2xl:px-3 2xl:text-[13px] 2xl:tracking-wide ${
                         isActive || isOpen ? 'text-leaf-800' : 'text-ink-600 hover:text-ink-900'
                       }`
                     }

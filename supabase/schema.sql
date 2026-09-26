@@ -1,4 +1,4 @@
--- NorthLeaf Cannabis — database schema
+-- CanabisLeafHub — database schema
 -- Apply with: node scripts/supabase-setup.mjs (or paste into the Supabase SQL editor).
 --
 -- Security model: the browser only ever uses the anon key, so every table has RLS on.

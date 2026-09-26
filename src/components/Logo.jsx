@@ -1,5 +1,5 @@
 /**
- * NorthLeaf identity.
+ * CanabisLeafHub identity.
  *
  * The mark is a leaf that reads as a compass needle: pointed at both ends,
  * split down the midrib so one half is light and one is dark, the way a needle

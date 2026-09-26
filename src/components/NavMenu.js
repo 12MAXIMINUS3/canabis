@@ -46,6 +46,7 @@ export const NAV = [
   },
   {
     label: 'Flowers',
+    secondary: true, // lives in the Shop menu too; first to go when space is tight
     to: '/shop?category=flower',
     links: [
       { label: 'All flower', to: '/shop?category=flower' },
@@ -56,6 +57,7 @@ export const NAV = [
   },
   {
     label: 'Vapes',
+    secondary: true, // lives in the Shop menu too; first to go when space is tight
     to: '/shop?category=vapes',
     links: [
       { label: 'All vapes', to: '/shop?category=vapes' },
@@ -65,6 +67,7 @@ export const NAV = [
   },
   {
     label: 'Concentrates',
+    secondary: true, // lives in the Shop menu too; first to go when space is tight
     to: '/shop?category=concentrates',
     links: [
       { label: 'All concentrates', to: '/shop?category=concentrates' },
@@ -74,6 +77,7 @@ export const NAV = [
   },
   {
     label: 'Edibles',
+    secondary: true, // lives in the Shop menu too; first to go when space is tight
     to: '/shop?category=edibles',
     links: [
       { label: 'All edibles', to: '/shop?category=edibles' },
@@ -84,6 +88,7 @@ export const NAV = [
   },
   {
     label: 'CBD',
+    secondary: true, // lives in the Shop menu too; first to go when space is tight
     to: '/shop?category=cbd',
     links: [
       { label: 'All CBD', to: '/shop?category=cbd' },
@@ -93,6 +98,7 @@ export const NAV = [
   },
   {
     label: 'Accessories',
+    secondary: true, // lives in the Shop menu too; first to go when space is tight
     to: '/shop?category=accessories',
     links: [
       { label: 'All accessories', to: '/shop?category=accessories' },
@@ -118,7 +124,7 @@ export const NAV = [
     links: [
       { label: 'Become a vendor', to: '/vendors' },
       { label: 'What we look for', to: '/vendors#apply' },
-      { label: 'About NorthLeaf', to: '/about' },
+      { label: 'About CanabisLeafHub', to: '/about' },
       { label: 'Field Notes', to: '/blog' },
     ],
   },

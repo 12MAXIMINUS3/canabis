@@ -21,7 +21,7 @@ export default function Footer() {
               <LogoMark className="h-5 w-5" />
             </span>
             <span className="font-display text-xl font-extrabold tracking-tight text-white">
-              North<span className="text-mint-400">Leaf</span>
+              Canabis<span className="text-mint-400">Leaf</span>Hub
             </span>
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-sand-100/60">
@@ -65,7 +65,7 @@ export default function Footer() {
 
       <div className="border-t border-white/10">
         <div className="shell flex flex-col gap-4 py-6 text-xs text-sand-100/50 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} NorthLeaf Cannabis. A fictional storefront for demonstration purposes.</p>
+          <p>© {new Date().getFullYear()} CanabisLeafHub. A fictional storefront for demonstration purposes.</p>
           <p className="flex flex-wrap items-center gap-x-4 gap-y-1">
             <span>Legal age only</span>
             <span aria-hidden="true">·</span>

@@ -319,7 +319,7 @@ function Dashboard() {
             <LogoMark className="h-6 w-6" />
           </span>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-mint-300">NorthLeaf admin</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-mint-300">CanabisLeafHub admin</p>
             <h1 className="mt-0.5 font-display text-2xl font-extrabold text-white">Dashboard</h1>
             <p className="text-sm text-sand-100/60">{user?.email}</p>
           </div>
