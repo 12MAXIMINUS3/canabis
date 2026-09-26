@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowRight,
   Plus,
+  Trash,
   Cart,
   Check,
   ChevronDown,
@@ -31,6 +32,7 @@ import {
   fetchSubscribers,
   updateOrderStatus,
   updateProduct,
+  deleteProduct,
   useAdmin,
 } from '../context/AdminContext';
 import { useToast } from '../context/ToastContext';
@@ -216,6 +218,7 @@ function Dashboard() {
   const { user, signOut } = useAdmin();
   const { products, refresh } = useCatalog();
   const [editing, setEditing] = useState(null); // product being edited, or "new"
+  const [confirmingDelete, setConfirmingDelete] = useState(null); // product id awaiting confirmation
   const { push } = useToast();
 
   const [tab, setTab] = useState('overview');
@@ -269,6 +272,18 @@ function Dashboard() {
     }
     setOrders((prev) => prev.map((o) => (o.id === order.id ? { ...o, status } : o)));
     push('Order updated', { detail: `${order.order_number} → ${status}` });
+  };
+
+  const removeProduct = async (product) => {
+    const { error } = await deleteProduct(product.id);
+    setConfirmingDelete(null);
+    if (error) {
+      push('Could not delete that product', { tone: 'info', detail: error.message });
+      return;
+    }
+    refresh(); // pull the catalogue again so the shop and this table agree
+    load();
+    push('Product deleted', { tone: 'info', detail: `${product.name} has been removed from the shop.` });
   };
 
   const toggleStock = async (product) => {
@@ -501,7 +516,7 @@ function Dashboard() {
                 </button>
               </div>
 
-              <Table headers={['Product', 'Category', 'Price', 'Potency', 'Stock', '']}>
+              <Table headers={['Product', 'Category', 'Price', 'Potency', 'Stock', 'Actions']}>
                 {products.map((p) => (
                   <tr key={p.id} className="hover:bg-sand-50">
                     <td className="px-4 py-3">
@@ -531,10 +546,45 @@ function Dashboard() {
                         {p.inStock ? 'In stock' : 'Out of stock'}
                       </button>
                     </td>
-                    <td className="px-4 py-3 text-right">
-                      <button type="button" onClick={() => setEditing(p)} className="btn btn-md btn-secondary px-3 py-1.5 text-xs">
-                        Edit
-                      </button>
+                    <td className="px-4 py-3">
+                      {confirmingDelete === p.id ? (
+                        <div className="flex items-center justify-end gap-2">
+                          <span className="whitespace-nowrap text-xs text-ink-500">Delete?</span>
+                          <button
+                            type="button"
+                            onClick={() => removeProduct(p)}
+                            className="btn btn-md bg-clay px-3 py-1.5 text-xs text-white hover:opacity-90"
+                          >
+                            Yes
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmingDelete(null)}
+                            className="btn btn-md btn-ghost px-3 py-1.5 text-xs"
+                          >
+                            No
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setEditing(p)}
+                            className="btn btn-md btn-secondary px-3 py-1.5 text-xs"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmingDelete(p.id)}
+                            aria-label={`Delete ${p.name}`}
+                            title={`Delete ${p.name}`}
+                            className="grid h-8 w-8 place-items-center rounded-full border border-ink-900/10 text-ink-400 transition-colors hover:border-clay/40 hover:bg-clay/10 hover:text-clay"
+                          >
+                            <Trash className="h-4 w-4" />
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}

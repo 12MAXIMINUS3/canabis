@@ -312,3 +312,11 @@ export const Tag = (p) => (
     <circle cx="8" cy="8" r="1.3" />
   </Svg>
 );
+
+export const Trash = (p) => (
+  <Svg {...p}>
+    <path d="M4 7h16M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7" />
+    <path d="M6.5 7l.8 11.2A2 2 0 0 0 9.3 20h5.4a2 2 0 0 0 2-1.8L17.5 7" />
+    <path d="M10.5 11v5M13.5 11v5" />
+  </Svg>
+);
