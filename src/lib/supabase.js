@@ -3,16 +3,29 @@ import { createClient } from '@supabase/supabase-js';
 /**
  * Supabase client.
  *
- * Both values come from .env.local and are safe in the browser: the anon key is
- * public by design and every table is behind Row Level Security, which allows
- * reading the catalogue and inserting form submissions and nothing else.
+ * Both values are safe in the browser. The anon key is public by design — it is
+ * shipped inside this bundle and anyone can read it out of the deployed site —
+ * and it is worth nothing on its own, because every table is behind Row Level
+ * Security. An anonymous visitor may read the catalogue and post a form, and
+ * cannot read a single order, message or subscriber, or change any price.
+ * Anything that matters requires a signed-in account on the admin allowlist.
  *
- * If the variables are missing the client is null rather than throwing, so a
- * fresh clone of the repo still runs against the bundled mock data.
+ * Environment variables win where they exist, so a fork can point this at its
+ * own project without touching code. The defaults below exist so the deployed
+ * site works even when a host has no variables set — otherwise the build
+ * silently falls back to the bundled sample catalogue with sign-in disabled,
+ * which looks like a bug rather than a missing setting.
+ *
+ * The service_role key is a different matter entirely and must never appear
+ * here: it bypasses Row Level Security completely.
  */
 
-const url = import.meta.env.VITE_SUPABASE_URL;
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const DEFAULT_URL = 'https://ykhbcrdoluybmnhljpdf.supabase.co';
+const DEFAULT_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlraGJjcmRvbHV5Ym1uaGxqcGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMjUzMjUsImV4cCI6MjEwNTkwMTMyNX0.F_-7zW0zpIAMQIG9EHt2zWBmARdgvuTamDqoZNEB9EU';
+
+const url = import.meta.env.VITE_SUPABASE_URL || DEFAULT_URL;
+const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || DEFAULT_ANON_KEY;
 
 export const isConfigured = Boolean(url && anonKey);
 
