@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Leaf, SocialCamera, SocialChat, SocialGlobe, SocialPlay } from './Icons';
+import { SocialCamera, SocialChat, SocialGlobe, SocialPlay } from './Icons';
+import { LogoMark } from './Logo';
 import { FOOTER_COLUMNS } from './NavMenu';
 
 // Placeholder social links — generic glyphs, no real platform marks or accounts.
@@ -16,8 +17,8 @@ export default function Footer() {
       <div className="shell grid gap-12 py-16 lg:grid-cols-[1.4fr_repeat(4,1fr)] lg:gap-8">
         <div>
           <div className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-leaf-600 text-white">
-              <Leaf className="h-5 w-5" />
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-leaf-600">
+              <LogoMark className="h-5 w-5" />
             </span>
             <span className="font-display text-xl font-extrabold tracking-tight text-white">
               North<span className="text-mint-400">Leaf</span>

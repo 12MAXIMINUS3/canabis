@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="NorthLeaf">
+  <title>NorthLeaf</title>
+  <rect width="32" height="32" rx="7.5" fill="#0f6251"/>
+  <g transform="translate(16 16) scale(0.82) translate(-16 -16)">
+    <path d="M16 3.2C9.2 8 4.8 11.6 4.8 16S9.2 24 16 28.8Z" fill="#7bd0b4"/>
+    <path d="M16 3.2C22.8 8 27.2 11.6 27.2 16S22.8 24 16 28.8Z" fill="#effaf6"/>
+    <path d="M16 3.2v25.6" stroke="#0e4038" stroke-width="1.6" stroke-linecap="round" opacity="0.5"/>
+  </g>
+</svg>

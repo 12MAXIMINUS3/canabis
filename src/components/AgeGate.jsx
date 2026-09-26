@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { IdCard, Leaf, ShieldCheck } from './Icons';
+import { IdCard, ShieldCheck } from './Icons';
+import { LogoMark } from './Logo';
 import { EASE } from './Motion';
 
 /**
@@ -92,7 +93,7 @@ export default function AgeGate() {
               {status === 'ask' ? (
                 <>
                   <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-leaf-700 text-white shadow-soft">
-                    <Leaf className="h-7 w-7" />
+                    <LogoMark className="h-7 w-7" />
                   </span>
 
                   <p className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-leaf-700">

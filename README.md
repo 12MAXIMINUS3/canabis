@@ -247,3 +247,33 @@ Vite inlines `VITE_*` variables **at build time**, so adding them is not enough 
 its own — redeploy afterwards. Without them the site still runs, but it serves the
 bundled sample catalogue and staff sign-in is disabled, because the app has no
 database to talk to.
+
+## Brand
+
+The mark is a leaf that doubles as a compass needle — pointed at both ends and
+split down the midrib so one half is light and one dark, the way a needle is
+coloured to show which end points north. It carries both halves of the name in
+one shape, and being a single silhouette with one hard contrast edge it survives
+16px in a browser tab, where an outlined leaf turns to mush.
+
+`components/Logo.jsx` exports three pieces:
+
+| Export | Use |
+| --- | --- |
+| `<LogoMark />` | the symbol alone, any size |
+| `<LogoBadge />` | the symbol on brand green, for avatars |
+| `<Logo />` | badge plus wordmark; `tone="light"` on dark backgrounds |
+
+Icons in `public/` are generated from the same geometry, so the tab, the phone
+home screen and the header can never drift apart:
+
+| File | Used by |
+| --- | --- |
+| `favicon.svg` | modern browser tabs, scales to any size |
+| `favicon-16/32/48.png` | browsers that still want raster |
+| `apple-touch-icon.png` | iOS home screen (iOS rounds the corners itself) |
+| `icon-192/512.png` | Android and the web manifest |
+| `icon-maskable-512.png` | Android adaptive icons, drawn inside the safe zone |
+
+To regenerate after a design change, re-render the same SVG at each size rather
+than resizing a PNG — the small sizes use a tighter crop on purpose.

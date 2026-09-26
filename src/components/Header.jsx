@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Cart, ChevronDown, Leaf, Menu, Tag, User, X } from './Icons';
+import { Cart, ChevronDown, Menu, Tag, User, X } from './Icons';
+import { LogoMark } from './Logo';
 import { EASE } from './Motion';
 import { NAV } from './NavMenu';
 import { useCart } from '../context/CartContext';
@@ -80,8 +81,8 @@ export default function Header() {
 
       <div className="shell flex h-16 items-center justify-between gap-4 sm:h-[4.5rem]">
         <Link to="/" className="group flex shrink-0 items-center gap-2.5" aria-label="NorthLeaf Cannabis — home">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-leaf-700 text-white shadow-soft transition-transform duration-300 group-hover:-rotate-6">
-            <Leaf className="h-5 w-5" />
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-leaf-700 shadow-soft transition-transform duration-300 group-hover:-rotate-6">
+            <LogoMark className="h-5 w-5" />
           </span>
           <span className="font-display text-xl font-extrabold tracking-tight text-ink-900">
             North<span className="text-leaf-600">Leaf</span>

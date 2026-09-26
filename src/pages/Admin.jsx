@@ -21,6 +21,7 @@ import { EASE } from '../components/Motion';
 import { formatPrice } from '../context/CartContext';
 import { useCatalog } from '../context/CatalogContext';
 import ProductForm from '../components/ProductForm';
+import { LogoMark } from '../components/Logo';
 import Thumb from '../components/Thumb';
 import {
   ORDER_STATUSES,
@@ -315,7 +316,7 @@ function Dashboard() {
       <div className="flex flex-col gap-5 rounded-4xl bg-ink-900 p-7 text-white sm:flex-row sm:items-center sm:justify-between sm:p-9">
         <div className="flex items-center gap-4">
           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-leaf-600 text-white">
-            <Leaf className="h-6 w-6" />
+            <LogoMark className="h-6 w-6" />
           </span>
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-mint-300">NorthLeaf admin</p>
